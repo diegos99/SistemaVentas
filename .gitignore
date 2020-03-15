@@ -5,3 +5,4 @@ myvenv
 db.oracle
 /static
 .DS_Store
+static
