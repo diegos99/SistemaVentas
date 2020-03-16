@@ -6,6 +6,7 @@ urlpatterns = [
     
     path('clientes/create_update_clientes.html', views.formularioAgregarObjeto),
     path('clientes/lista_cliente.html', views.lista_objetos),
-    path('editarObjeto/<int:objeto_id>', views.editarObjeto),
-    path('eliminarObjeto/<int:objeto_id>', views.eliminarObjeto),
+    path('editar_cliente/<int:objeto_id>', views.editarObjeto),
+    path('eliminar_cliente/<int:objeto_id>', views.eliminarObjeto),
+    path('detalle_clientes/<int:objeto_id>', views.detalle_objetos),
 ]
