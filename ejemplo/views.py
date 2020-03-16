@@ -12,11 +12,11 @@ def formularioAgregarObjeto(request):
 			formulario.save()
 	else:
 		formulario=FormularioObjeto()
-	return render(request, 'ejemplo/agregarObjeto.html', {'formulario':formulario})
+	return render(request, 'clientes/create_update_clientes.html', {'formulario':formulario})
 
 def lista_objetos(request):
 	objetos = objeto.objects.all()
-	return render(request, 'ejemplo/listaObjeto.html', {'objetos': objetos})
+	return render(request, 'clientes/lista_cliente.html', {'objetos': objetos})
 
 def editarObjeto(request, objeto_id):
 	objetos = objeto.objects.get(id = objeto_id)

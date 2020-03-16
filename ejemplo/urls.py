@@ -3,8 +3,9 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
-    path('ejemplo/agregarObjeto.html', views.formularioAgregarObjeto),
-    path('ejemplo/listaObjeto.html', views.lista_objetos),
+    
+    path('clientes/create_update_clientes.html', views.formularioAgregarObjeto),
+    path('clientes/lista_cliente.html', views.lista_objetos),
     path('editarObjeto/<int:objeto_id>', views.editarObjeto),
     path('eliminarObjeto/<int:objeto_id>', views.eliminarObjeto),
 ]
