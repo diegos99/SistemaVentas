@@ -1,5 +1,5 @@
 {% extends "clientes/base_cliente_lista.html" %}
-{% block title %}Clientes{% endblock title %}
+{% block title %}TipoClientes{% endblock title %}
 {% block content %}
 {% include "nav.html" %}
 {% block producto %}    
@@ -9,13 +9,11 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>            
-            Clientes
+            Tipos de cliente
           </h1>
           <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i>Inicio</a></li>
-            <li class="active">Clientes</li>
-            <li><a href="/clientes/create_update_clientes.html">Nuevo Cliente</a></li>
-            
+            <li class="active">Tipo de Clientes</li>            
           </ol>
         </section>
 
@@ -25,10 +23,7 @@
             <div class="col-xs-12">
 
                 <div class="box box-primary">
-                  <div class="box-header with-border">
-                    <h3 class="box-title"><a href="/clientes/create_update_clientes.html" class="btn btn-success">
-                      Nuevo Cliente
-                    </a></h3>
+                  <div class="box-header with-border">                    
                     <div class="box-tools pull-right">
                       <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div><!-- /.box-tools -->
@@ -37,29 +32,19 @@
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                      <tr>
-                        <th>Nit</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Telefono</th>
-                        <th>Patente</th>
-                        <th>ID_Tipo</th>
+                        <th>Descripcion</th>
+                        <th>Descuento</th>
                       </tr>
                     </thead>
                     <tbody>
                     
-                      {% for cliente in clientes %}       
+                      {% for objeto in objetos %}       
 
                         <tr> 
-                          <td>{{ cliente.nit }}</td>
-                          <td>{{ cliente.nombre }}</td>
-                          <td>{{ cliente.email }}</td>
-                          <td>{{ cliente.telefono }}</td>
-                          <td>{{ cliente.patente }}</td>
-                          <td>{{ cliente.tipo }}</td>
-                          <td class="text-right">
-                            <a href="/detalle_clientes/{{ cliente.id }}" class="btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a href="/editar_cliente/{{ cliente.id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>                            
-                            <a href="/eliminar_cliente/{{ cliente.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>                              
+                          <td>{{ objeto.descripcion }}</td>
+                          <td>{{ objeto.nombre }}</td>                          
+                          <td class="text-right">                            
+                            <a href="/create_tipo_cliente/{{ objeto.id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>
                            </td>
                       {% endfor %}
                     </tbody>

@@ -1,5 +1,5 @@
 {% extends "clientes/base_cliente_lista.html" %}
-{% block title %}Productos{% endblock title %}
+{% block title %}EditarCliente{% endblock title %}
 {% block content %}
 {% include "nav.html" %}
 {% block producto %} 
@@ -9,12 +9,12 @@
          <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>            
-            Editar Clientes
+            Nuevo Cliente
           </h1>
           <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i>Inicio</a></li>
             <li><a href="/clientes/lista_cliente.html">Clientes</a></li>
-            <li class="active">Nuevo Cliente</li>
+            <li class="active">Editar Cliente</li>
           </ol>
         </section>
         <!-- Main content -->
@@ -38,25 +38,55 @@
                             {% csrf_token %} 
                             <div class="row">                              
                                 <div class="col-xs-12 col-sm-10">    
+                                  <!-- Acá comienzan los campos -->
+                                  <div class="form-group has-success has-feedback">
+                                    <label class="control-label col-sm-2" for="id_nit">{{ formulario.nit.label_tag }}</label>
+                                    <div class="col-sm-6">               
+                                        <input type="number" name="nit" id="id_nit" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                    </div>
+                                 </div>
+                                  <br>
                                   <div class="form-group has-success has-feedback">
                                     <label class="control-label col-sm-2" for="id_nombre">{{ formulario.nombre.label_tag }}</label>
                                     <div class="col-sm-6">               
                                         <input type="text" name="nombre" id="id_nombre" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
                                     </div>
-                                  </div> 
-<br>
-                                 
-                                 <div class="form-group has-success has-feedback">
-                                    <label class="control-label col-sm-2" for="id_descripcion">{{ formulario.descripcion.label_tag }}</label>
+                                  </div>
+                                  <br>
+                                  <div class="form-group has-success has-feedback">
+                                    <label class="control-label col-sm-2" for="id_email">{{ formulario.email.label_tag }}</label>
                                     <div class="col-sm-6">               
-                                        <input type="text" name="descripcion" id="id_descripcion" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                        <input type="text" name="email" id="id_email" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
                                     </div>
-                                 </div>
+                                  </div>
+                                  <br>
+                                  <div class="form-group has-success has-feedback">
+                              <label class="control-label col-sm-2" for="id_telefono">{{ formulario.telefono.label_tag }}</label>
+                              <div class="col-sm-6">               
+                                  <input type="number" name="telefono" id="id_telefono" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                              </div>
+                           </div>
+                          <br>
+                          <div class="form-group has-success has-feedback">
+                            <label class="control-label col-sm-2" for="id_patente">{{ formulario.patente.label_tag }}</label>
+                            <div class="col-sm-6">               
+                                <input type="text" name="patente" id="id_patente" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                            </div>
+                         </div>
+                          <br>
+                          <div class="form-group has-success has-feedback">
+                            <label class="control-label col-sm-2" for="id_tipo">{{ formulario.tipo.label_tag }}</label>
+                            <div class="col-sm-6">                                
+                                {{formulario.tipo}}
+                            </div>
+                         </div>
+                        <br>
+                                                              
                                  <div class="panel-footer color-footer">
                                     <button type="submit" class="btn btn-primary">
                                                Grabar
                                     </button>
-                                 </div>                                       
+                                 </div>                                     
                                 </div>                                                        
                             </div> <!--<div class="row"> -->                                                                                      
                         </form>

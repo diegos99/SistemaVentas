@@ -21,13 +21,13 @@
             <!-- User Account: style can be found in dropdown.less -->
              <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="{{ MEDIA_URL }}{{ user.avatar }}" class="img-circle" alt="User Image" height="20" width="20" > 
+                <img src="https://image.freepik.com/vector-gratis/perfil-avatar-hombre-icono-redondo_24640-14044.jpg" class="img-circle" alt="User Image" height="20" width="20" > 
                 <span class="hidden-xs">{{ user.username|capfirst }} {{ user.last_name|capfirst }}</span>
               </a>
               <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
-                  <img src="{{ MEDIA_URL }}{{ user.avatar }}" class="img-circle" alt="User Image" > 
+                  <img src="https://image.freepik.com/vector-gratis/perfil-avatar-hombre-icono-redondo_24640-14044.jpg" class="img-circle" alt="User Image" > 
                    <p>
                      {{ user.username|capfirst }} {{ user.last_name|capfirst }}
                 
@@ -60,7 +60,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
           <div class="pull-left image">
-          <img src="{{ MEDIA_URL }}{{ user.avatar }}" class="img-circle" alt="User Image" > 
+          <img src="https://image.freepik.com/vector-gratis/perfil-avatar-hombre-icono-redondo_24640-14044.jpg" class="img-circle" alt="User Image" > 
           </div>
           <div class="pull-left info">
             <p>{{ user.username|capfirst }} {{ user.last_name|capfirst }}</p>
@@ -70,7 +70,7 @@
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-          <li class="header">MAIN NAVIGATION</li>
+          <li class="header">MENU PRINCIPAL</li>
 
        
           
@@ -81,29 +81,31 @@
             <ul class="treeview-menu">
               <li class="active"><a href="/clientes/lista_cliente.html"><i class="fa fa-check-square"></i> Lista</a></li>
               <li><a href="/clientes/create_update_clientes.html"><i class="fa fa-save"></i><small class="label pull-right bg-green">Nuevo</small>Nuevo</a></li>
+              <li class="active"><a href="/clientes/lista_tipo_cliente.html"><i class="fa fa-check-square"></i> Tipos de Cliente</a></li>
             </ul>
           </li>
 
           <li class="treeview">
             <a href="#">
-              <i class="fa fa-child"></i> <span>Distribuidores</span> <i class="fa fa-angle-left pull-right"></i>
+              <i class="fa fa-list-alt"></i> <span>Suscripciones</span> <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-              <li class="active"><a href="[% url 'distribuidores_app:lista_distribuidores' %]"><i class="fa fa-check-square"></i> Lista</a></li>
-              <li><a href="[% url 'distribuidores_app:create_distribuidor' %]"><i class="fa fa-save"></i><small class="label pull-right bg-green">Nuevo</small>Nuevo</a></li>
-            </ul>
-          </li>
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-child"></i> <span>Laboratorios</span> <i class="fa fa-angle-left pull-right"></i>
-            </a>
-            <ul class="treeview-menu">
-              <li class="active"><a href="[% url 'laboratorios_app:lista_laboratorios' %]"><i class="fa fa-check-square"></i> Lista</a></li>
-              <li><a href="[% url 'laboratorios_app:create_laboratorios' %]"><i class="fa fa-save"></i><small class="label pull-right bg-green">Nuevo</small>Nuevo</a></li>
+              <li class="active"><a href="/suscripciones/lista_suscrip.html"><i class="fa fa-check-square"></i> Lista Suscripciones</a></li>
+              <li><a href="/suscripciones/create_suscrip.html"><i class="fa fa-save"></i><small class="label pull-right bg-green">Nuevo</small>Nuevo</a></li>
             </ul>
           </li>
 
           <li class="treeview">
+            <a href="#">
+              <i class="fa fa-cogs"></i> <span>Repuestos</span> <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li class="active"><a href="[% url 'distribuidores_app:lista_distribuidores' %]"><i class="fa fa-check-square"></i> Inventario</a></li>
+              <li><a href=""><i class="fa fa-save"></i><small class="label pull-right bg-green">Nuevo</small>Nuevo</a></li>
+            </ul>
+          </li>
+
+          <!-- <li class="treeview">
             <a href="#">
               <i class="fa fa-medkit"></i>
               <span>Medicamentos</span>
@@ -113,7 +115,7 @@
               <li><a href="[% url 'medicamentos_app:lista_medicamentos' %]"><i class="fa fa fa-check-square"></i> Lista</a></li>                
               <li><a href="[% url 'medicamentos_app:create_medicamentos' %]"><i class="fa fa-save"></i><small class="label pull-right bg-green">Nuevo</small>Nuevo</a></li>               
             </ul>
-          </li>
+          </li> -->
 
    
           <li class="treeview">
@@ -123,9 +125,9 @@
               <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-              <li><a href="[% url 'compras_app:lista_compras' %]"><i class="fa fa-circle-o"></i> Listado de Compras</a></li>
-              <li><a href="[% url 'compras_app:realizar_compra' %]"><i class="fa fa-circle-o"></i> Realizar Compras</a></li>
-              <li><a href="[% url 'compras_app:generar_reporte_lista_compras' %]"><i class="fa fa-circle-o"></i> Reportes Compras</a></li>                
+              <li><a href=""><i class="fa fa-circle-o"></i> Listado de Compras</a></li>
+              <li><a href=""><i class="fa fa-circle-o"></i> Realizar Compras</a></li>
+              <li><a href=""><i class="fa fa-circle-o"></i> Reportes Compras</a></li>                
             </ul>
           </li>
           <li class="treeview">
@@ -135,11 +137,11 @@
               <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-            <li><a href="[% url 'factura_app:lista_ventas' %]"><i class="fa fa-circle-o"></i> Lista Ventas</a></li>
+            <li><a href=""><i class="fa fa-circle-o"></i> Lista Ventas</a></li>
              
-              <li><a href="[% url 'factura_app:factura_venta' %]"><i class="fa fa-circle-o"></i> Realizar Venta</a></li>
-              <li><a href="[% url 'factura_app:consultar_factura' %]"><i class="fa fa-circle-o"></i> Consultar Venta</a></li>
-              <li><a href="[% url 'factura_app:generar_reporte_factura' %]"><i class="fa fa-circle-o"></i> Reporte Venta</a></li>
+              <li><a href=""><i class="fa fa-circle-o"></i> Realizar Venta</a></li>
+              <li><a href=""><i class="fa fa-circle-o"></i> Consultar Venta</a></li>
+              <li><a href=""><i class="fa fa-circle-o"></i> Reporte Venta</a></li>
              
             </ul>
           </li>
