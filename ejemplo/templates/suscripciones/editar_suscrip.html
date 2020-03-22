@@ -42,14 +42,14 @@
                                   <div class="form-group has-success has-feedback">
                                     <label class="control-label col-sm-2" for="id_fecha_creacion">{{ formulario.fecha_creacion.label_tag }}</label>
                                     <div class="col-sm-6">               
-                                        <input type="date" name="fecha_creacion" id="id_fecha_creacion" class="form-control" value='2020-01-01' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                        <input type="text" name="fecha_creacion" id="id_fecha_creacion" class="form-control" value='{{formulario.fecha_creacion.value|date:"m/d/Y"}}' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" > 
                                     </div>
                                  </div>
                                   <br>
                                   <div class="form-group has-success has-feedback">
                                     <label class="control-label col-sm-2" for="id_fecha_expiracion">{{ formulario.fecha_expiracion.label_tag }}</label>
                                     <div class="col-sm-6">               
-                                        <input type="date" name="fecha_expiracion" id="id_fecha_expiracion" class="form-control" value='2021-01-01' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                      <input type="text" name="fecha_expiracion" id="id_fecha_expiracion" class="form-control" value='{{formulario.fecha_expiracion.value|date:"m/d/Y"}}' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" > 
                                     </div>
                                  </div>
                                   <br>

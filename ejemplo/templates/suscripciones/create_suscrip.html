@@ -42,7 +42,7 @@
                                   <div class="form-group has-success has-feedback">
                                     <label class="control-label col-sm-2" for="id_fecha_creacion">{{ formulario.fecha_creacion.label_tag }}</label>
                                     <div class="col-sm-6">               
-                                        <input type="date" name="fecha_creacion" id="id_fecha_creacion" class="form-control" value='2020-01-01' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                        <input type="date" name="fecha_creacion" id="id_fecha_creacion" class="form-control" value='2020-01-01' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >
                                     </div>
                                  </div>
                                   <br>
@@ -56,7 +56,7 @@
                                   <div class="form-group has-success has-feedback">
                                     <label class="control-label col-sm-2" for="id_estado">{{ formulario.estado.label_tag }}</label>
                                     <div class="col-sm-6">               
-                                        <input type="text" name="estado" id="id_estado" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                        <input type="text" name="estado" id="id_estado" class="form-control" value='{{formulario.estado.value}}' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
                                     </div>
                                   </div>
                                   <br>
@@ -68,6 +68,7 @@
                                         </select>
                                     </div>
                                  </div>
+                                 <p> {{suscripcion.estadosuscripcion}}</p>
                                   <br>  
                                  <div class="panel-footer color-footer">
                                     <button type="submit" class="btn btn-primary">

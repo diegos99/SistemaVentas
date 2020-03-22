@@ -41,6 +41,7 @@
                         <th>Fecha Expiracion</th>
                         <th>Estado</th>
                         <th>ID Cliente</th>
+                        <th>Vencimiento</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -52,6 +53,13 @@
                           <td>{{ suscripcion.fecha_expiracion }}</td>
                           <td>{{ suscripcion.estado }}</td>
                           <td>{{ suscripcion.cliente }}</td>
+                          {% if suscripcion.estadosuscripcion > 30 %}
+                                  <td><b style="color:green;">{{suscripcion.estadosuscripcion}} - {{suscripcion.fecha_expiracion|date:'d/m/Y' }}</b></td>
+                              {% elif suscripcion.estadosuscripcion <= 30 and suscripcion.estadosuscripcion > 0 %}
+                                  <td><b style="color:rgb(243, 156, 18);">{{suscripcion.estadosuscripcion}} - {{suscripcion.fecha_expiracion|date:'d/m/Y' }}</b></td>
+                              {% else %}
+                              <td><b style="color:red;">{{suscripcion.estadosuscripcion}} - {{suscripcion.fecha_expiracion|date:'d/m/Y' }}</b></td>
+                              {% endif %} 
                           
                           
                           <td class="text-right">

@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+import datetime
 # Create your models here.
 class objeto (models.Model):
 	nombre = models.CharField(max_length=50)
@@ -9,7 +9,7 @@ class objeto (models.Model):
 	def unicode (self):
 		return self.nombre
 
-#Tipo de cliente
+#TTIPO DE CLIENTE
 class tipocliente (models.Model):
 	descripcion = models.CharField(max_length=50)
 	descuento = models.DecimalField(max_digits=5, decimal_places=2)
@@ -17,7 +17,7 @@ class tipocliente (models.Model):
 		return self.descripcion
 			
 
-
+#CLIENTE
 class cliente (models.Model):
 	nit = models.IntegerField(unique=True)
 	nombre = models.CharField(max_length=60)
@@ -28,11 +28,11 @@ class cliente (models.Model):
 	def unicode (self):
 		return self.nombre
 		
-			
+#SUSCRIPCION		
 class suscripcion(models.Model):	
 	fecha_creacion = models.DateField()
 	fecha_expiracion = models.DateField()
-	estado = models.CharField(max_length=40)
+	estado = models.CharField(max_length=40, default='vigente')
 	cliente = models.ForeignKey(cliente, on_delete=models.PROTECT)
 	def unicode (self):
 		return self.estado
@@ -42,3 +42,10 @@ class suscripcion(models.Model):
 		dias = (self.fecha_expiracion - hoy).days
 		return dias	
 
+	def save(self, *args, **kwargs):
+		if self.estadosuscripcion() < 0:
+			self.estado = 'vencido'
+			super(suscripcion, self).save(*args, **kwargs)
+		else:
+			self.estado = 'vigente'
+			super(suscripcion, self).save(*args, **kwargs)
