@@ -7,7 +7,14 @@ class objeto (models.Model):
 	nombre = models.CharField(max_length=50)
 	descripcion = models.CharField(max_length=50)
 	def unicode (self):
-		return self.nombre	
+		return self.nombre
+
+#Tipo de cliente
+class tipocliente (models.Model):
+	descripcion = models.CharField(max_length=50)
+	descuento = models.DecimalField(max_digits=5, decimal_places=2)
+	def unicode (self):
+		return self.descripcion
 			
 
 
@@ -16,16 +23,16 @@ class cliente (models.Model):
 	nombre = models.CharField(max_length=60)
 	email = models.CharField(max_length=60)
 	telefono = models.IntegerField(verbose_name='Telefono')
-	patente = models.CharField(max_length=60)
-	tipo = models.ForeignKey(objeto, on_delete=models.PROTECT)
+	patente = models.ImageField(blank=True, null=True)
+	tipo = models.ForeignKey(tipocliente, on_delete=models.PROTECT)
 	def unicode (self):
 		return self.nombre
 		
 			
 class suscripcion(models.Model):	
-	estado = models.CharField(max_length=40)
-	fecha_expiracion = models.DateField()
 	fecha_creacion = models.DateField()
+	fecha_expiracion = models.DateField()
+	estado = models.CharField(max_length=40)
 	cliente = models.ForeignKey(cliente, on_delete=models.PROTECT)
 	def unicode (self):
 		return self.estado

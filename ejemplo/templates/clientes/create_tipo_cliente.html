@@ -41,16 +41,17 @@
                                   <div class="form-group has-success has-feedback">
                                     <label class="control-label col-sm-2" for="id_descripcion">{{ formulario.descripcion.label_tag }}</label>
                                     <div class="col-sm-6">               
-                                        <input type="text" name="descripcion" id="id_descripcion" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                        <input type="text" name="descripcion" id="id_descripcion" class="form-control" value='{{ formulario.descripcion.value }}' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
                                     </div>
                                  </div>
 <br>
                                   <div class="form-group has-success has-feedback">
-                                    <label class="control-label col-sm-2" for="id_nombre">Descuento</label>
+                                    <label class="control-label col-sm-2"  for="id_descuento">{{ formulario.descuento.label_tag }}</label>
                                     <div class="col-sm-6">               
-                                        <input type="text" name="nombre" id="id_nombre" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
+                                        <input type="text" name="descuento" id="id_descuento" class="form-control" value='{{ formulario.descuento.value }}' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >                                          
                                     </div>
-                                  </div>                                  
+                                  </div>     
+                                  
                                  <div class="panel-footer color-footer">
                                     <button type="submit" class="btn btn-primary">
                                                Grabar

@@ -38,13 +38,13 @@
                     </thead>
                     <tbody>
                     
-                      {% for objeto in objetos %}       
+                      {% for tipocliente in tipoclientes %}       
 
                         <tr> 
-                          <td>{{ objeto.descripcion }}</td>
-                          <td>{{ objeto.nombre }}</td>                          
+                          <td>{{ tipocliente.descripcion }}</td>
+                          <td>{{ tipocliente.descuento }}</td>                          
                           <td class="text-right">                            
-                            <a href="/create_tipo_cliente/{{ objeto.id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a href="/create_tipo_cliente/{{ tipocliente.id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>
                            </td>
                       {% endfor %}
                     </tbody>

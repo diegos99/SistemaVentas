@@ -4,9 +4,9 @@ from . import views
 urlpatterns = [
     path('', views.index),
     # TIPO DE CLIENTE
-    path('clientes/create_tipo_cliente.html', views.formularioAgregarObjeto),
-    path('clientes/lista_tipo_cliente.html', views.lista_objetos),
-    path('create_tipo_cliente/<int:objeto_id>', views.editarObjeto),
+    path('clientes/create_tipo_cliente.html', views.formularioAgregarTipoCliente),
+    path('clientes/lista_tipo_cliente.html', views.lista_tipo_clientes),
+    path('create_tipo_cliente/<int:tipo_cliente_id>', views.editarTipoCliente),
 
     # CLIENTE
     path('clientes/create_update_clientes.html', views.formularioAgregarCliente),

@@ -1,5 +1,5 @@
 {% extends "suscripciones/base_suscrip_lista.html" %}
-{% block title%}DetalleClientes{% endblock title %}
+{% block title%}DetalleSuscrip{% endblock title %}
 {% block content %}
 {% include "nav.html"%} 
 {% block producto %}
@@ -13,7 +13,7 @@
         <div class="col-md-12">
           <div class="box box-info">
             <div class="box-header with-border">
-              <a href="/clientes/lista_cliente.html" class="btn btn-success">
+              <a href="/suscripciones/lista_suscrip.html" class="btn btn-success">
                 <span class="glyphicon glyphicon-chevron-left"></span> Regresar
               </a>
               <div class="box-tools pull-right">
@@ -32,28 +32,20 @@
                     <td>{{ clientes.id }}</td>
                   </tr> -->
                   <tr class="success">
-                    <td><strong>Nit:</strong></td>
-                    <td>{{ clientes.nit }}</td>
+                    <td><strong>Fecha de creacion</strong></td>
+                    <td>{{ suscripciones.fecha_creacion }}</td>
                   </tr>
                   <tr class="success">
-                    <td><strong>Nombre:</strong></td>
-                    <td>{{ clientes.nombre }}</td>
+                    <td><strong>Fecha de expiracion</strong></td>
+                    <td>{{ suscripciones.fecha_expiracion }}</td>
                   </tr>
                   <tr class="success">
-                    <td><strong>Email:</strong></td>
-                    <td>{{ clientes.email }}</td>
+                    <td><strong>Estado</strong></td>
+                    <td>{{ suscripciones.estado }}</td>
                   </tr>
                   <tr class="success">
-                    <td><strong>Telefono:</strong></td>
-                    <td>{{ clientes.telefono }}</td>
-                  </tr>
-                  <tr class="success">
-                    <td><strong>Patente:</strong></td>
-                    <td>{{ clientes.patente }}</td>
-                  </tr>
-                  <tr class="success">
-                    <td><strong>ID_Tipo:</strong></td>
-                    <td>{{ clientes.tipo }}</td>
+                    <td><strong>ID_Clientes</strong></td>
+                    <td>{{ suscripciones.cliente }}</td>
                   </tr>
                 </tbody>
               </table>

@@ -1,33 +1,33 @@
 from django.shortcuts import render
-from .formularios import FormularioObjeto, FormularioCliente, FormularioSuscrip
-from .models import objeto, cliente, suscripcion
+from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip
+from .models import tipocliente, cliente, suscripcion
 # TIPO DE CLIENTE.
 def index(request):
 	return render(request, 'ejemplo/index.html')
 
-def formularioAgregarObjeto(request):
+def formularioAgregarTipoCliente(request):
 	if request.method=="POST":
-		formulario = FormularioObjeto(request.POST)
+		formulario = FormularioTipoCliente(request.POST)
 		if formulario.is_valid():
 			formulario.save()
 	else:
-		formulario=FormularioObjeto()
+		formulario=FormularioTipoCliente()
 	return render(request, 'clientes/create_tipo_cliente.html', {'formulario':formulario})
 
-def lista_objetos(request):
-	objetos = objeto.objects.all()
-	return render(request, 'clientes/lista_tipo_cliente.html', {'objetos': objetos})
+def lista_tipo_clientes(request):
+	tipoclientes = tipocliente.objects.all()
+	return render(request, 'clientes/lista_tipo_cliente.html', {'tipoclientes': tipoclientes})
 
 
-def editarObjeto(request, objeto_id):
-	objetos = objeto.objects.get(id = objeto_id)
+def editarTipoCliente(request, tipo_cliente_id):
+	tipoclientes = tipocliente.objects.get(id = tipo_cliente_id)
 	if request.method=="POST":
-		formulario = FormularioObjeto(request.POST, instance=objetos)
+		formulario = FormularioTipoCliente(request.POST, instance=tipoclientes)
 		if formulario.is_valid():
 			formulario.save()
 			return render(request, "clientes/create_tipo_cliente.html", {"formulario":formulario})
 	else:
-		formulario = FormularioObjeto(instance=objetos)
+		formulario = FormularioTipoCliente(instance=tipoclientes)
 		return render(request, "clientes/create_tipo_cliente.html", {"formulario":formulario})
 
 
@@ -36,7 +36,7 @@ def editarObjeto(request, objeto_id):
 # CLIENTES
 def formularioAgregarCliente(request):
 	if request.method=="POST":
-		formulario = FormularioCliente(request.POST)
+		formulario = FormularioCliente(request.POST, request.FILES or None)
 		if formulario.is_valid():
 			formulario.save()
 	else:
@@ -54,7 +54,7 @@ def detalle_clientes(request, cliente_id):
 def editarCliente(request, cliente_id):
 	clientes = cliente.objects.get(id = cliente_id)
 	if request.method=="POST":
-		formulario = FormularioCliente(request.POST, instance=clientes)
+		formulario = FormularioCliente(request.POST, request.FILES,instance=clientes)
 		if formulario.is_valid():
 			formulario.save()
 			return render(request, "clientes/editar_cliente.html", {"formulario":formulario})
