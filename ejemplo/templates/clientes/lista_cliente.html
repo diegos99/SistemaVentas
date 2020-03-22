@@ -54,7 +54,16 @@
                           <td>{{ cliente.nombre }}</td>
                           <td>{{ cliente.email }}</td>
                           <td>{{ cliente.telefono }}</td>
-                          <td>{{ cliente.patente }}</td>
+                          
+                          <td>
+                            {% if cliente.patente %}
+                            <img src="{{ cliente.patente.url }}" style="width: 70px;">
+                            {% else %}
+                            <p>Null</p>
+                            {% endif %}
+                          </td>
+                          
+                          
                           <td>{{ cliente.tipo }}</td>
                           <td class="text-right">
                             <a href="/detalle_clientes/{{ cliente.id }}" class="btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>
