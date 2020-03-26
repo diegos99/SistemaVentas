@@ -37,14 +37,16 @@
                       </tr>
                     </thead>
                     <tbody>
-                    
                       {% for tipocliente in tipoclientes %}       
 
-                        <tr> 
-                          <td>{{ tipocliente.descripcion }}</td>
-                          <td>{{ tipocliente.descuento }}</td>                          
+                        <tr>
+                          <td>{{ tipocliente.0 }}</td> 
+                          <td>{{ tipocliente.1 }}</td>
+                          <td>{{ tipocliente.2 }}</td>
+                          <!-- <td>{{ tipocliente.descripcion }}</td>
+                          <td>{{ tipocliente.descuento }}</td> -->
                           <td class="text-right">                            
-                            <a href="/create_tipo_cliente/{{ tipocliente.id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a href="/create_tipo_cliente/{{ tipocliente.0 }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>
                            </td>
                       {% endfor %}
                     </tbody>
