@@ -1,0 +1,83 @@
+{% extends "repuestos/base_repuestos_lista.html" %}
+{% block title%}DetalleRepuesto{% endblock title %}
+{% block content %}
+{% include "nav.html"%} 
+{% block producto %}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+      <!-- START ALERTS AND CALLOUTS -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <a href="/repuestos/lista_repuestos.html" class="btn btn-success">
+                <span class="glyphicon glyphicon-chevron-left"></span> Regresar
+              </a>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-striped table table-hover ">
+                <tbody>
+                  <!-- <tr class="success">
+                    <td><strong>ID:</strong></td>
+                    <td>{{ clientes.id }}</td>
+                  </tr> -->
+                  <tr class="success">
+                    <td><strong>ID Repuesto</strong></td>
+                    <td>{{ repuestos.id }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>Nombre</strong></td>
+                    <td>{{ repuestos.nombre }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>Descripcion</strong></td>
+                    <td>{{ repuestos.descripcion }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>No. Parte</strong></td>
+                    <td>{{ repuestos.no_parte }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>Stock</strong></td>
+                    <td>{{ repuestos.stock }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>Fabrica</strong></td>
+                    <td>{{ repuestos.fabrica }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>Precio de Fabrica (Q)</strong></td>
+                    <td>{{ repuestos.precio_fabricante }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>Precio de Venta (Q)</strong></td>
+                    <td>{{ repuestos.precio_venta }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  {% include "footer.html" %}
+  {% endblock producto %}
+  {% endblock content %}
+</div>

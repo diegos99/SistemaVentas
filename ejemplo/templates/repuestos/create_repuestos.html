@@ -1,0 +1,120 @@
+{% extends "repuestos/base_repuestos_lista.html" %}
+{% block title %}NuevoRepuesto{% endblock title %}
+{% block content %}
+{% include "nav.html" %}
+{% block producto %} 
+<div class="wrapper"> 
+      <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+         <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>            
+            Nuevo repuesto
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i>Inicio</a></li>
+            <li><a href="/repuestos/lista_repuestos.html">Repuestos</a></li>
+            <li class="active">Nuevo Repuesto</li>
+          </ol>
+        </section>
+        <!-- Main content -->
+    <section class="content">          
+      <!-- START ALERTS AND CALLOUTS -->     
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
+            <div class="box-header with-border">
+             
+            <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div><!-- /.box-tools -->
+                       
+            </div><!-- /.box-header -->
+              <div class="box-body"> 
+    
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <form enctype="multipart/form-data" method="POST" id="upload-image-form">
+                            {% csrf_token %} 
+                            <div class="row">                              
+                                <div class="col-xs-12 col-sm-10">    
+                                  <!-- Acá comienzan los campos -->
+                                  <div class="form-group has-success has-feedback">
+                                    <label class="control-label col-sm-2" for="id_nombre">{{ formulario.nombre.label_tag }}</label>
+                                    <div class="col-sm-6">               
+                                        <input type="text" name="nombre" id="id_nombre" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >
+                                    </div>
+                                 </div>
+                                  <br>
+                                  <div class="form-group has-success has-feedback">
+                                    <label class="control-label col-sm-2" for="id_descripcion">{{ formulario.descripcion.label_tag }}</label>
+                                    <div class="col-sm-6">
+                                      <textarea name="descripcion" cols="40" rows="10" maxlength="400" required="" id="id_descripcion" class="form-control"></textarea>
+                                    </div>
+                                 </div>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <br>
+                                  <div class="form-group has-success has-feedback">
+                                    <label class="control-label col-sm-2" for="id_no_parte">{{ formulario.no_parte.label_tag }}</label>
+                                    <div class="col-sm-6">               
+                                        <input type="number" name="no_parte" id="id_no_parte" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >
+                                    </div>
+                                  </div>
+                                  <br>
+                                  <div class="form-group has-success has-feedback">
+                                    <label class="control-label col-sm-2" for="id_stock">{{ formulario.stock.label_tag }}</label>
+                                    <div class="col-sm-6">                                
+                                      <input type="number" name="stock" id="id_stock" class="form-control" value='' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >
+                                    </div>
+                                 </div>
+                                 <br>
+                                 <div class="form-group has-success has-feedback">
+                                  <label class="control-label col-sm-2" for="id_precio_fabricante">{{ formulario.precio_fabricante.label_tag }}</label>
+                                  <div class="col-sm-6">                                
+                                    <input type="number" name="precio_fabricante" id="id_precio_fabricante" class="form-control" value='{{ formulario.precio_fabricante.value }}' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >
+                                  </div>
+                                </div>
+                                <br>
+                                <div class="form-group has-success has-feedback">
+                                  <label class="control-label col-sm-2" for="id_precio_venta">{{ formulario.precio_venta.label_tag }}</label>
+                                  <div class="col-sm-6">                                
+                                    <input type="number" name="precio_venta" id="id_precio_venta" class="form-control" value='{{ formulario.precio_venta.value }}' data-toggle="tooltip" data-placement="top" title='' autofocus='true' type="text" >
+                                  </div>
+                                </div>
+                                  <br>
+                                  <div class="form-group has-success has-feedback">
+                                    <label class="control-label col-sm-2" for="id_fabrica">{{ formulario.fabrica.label_tag }}</label>
+                                    <div class="col-sm-6">                                
+                                        <select name="fabrica" id="id_fabrica" class="form-control" data-toggle="tooltip" data-placement="top">
+                                          <option value="{{formulario.fabrica}}"></option>
+                                        </select>
+                                    </div>
+                                 </div>
+                                 <br>
+                                 <div class="panel-footer color-footer">
+                                    <button type="submit" class="btn btn-primary">
+                                               Grabar
+                                    </button>
+                                 </div>                                     
+                                </div>                                                        
+                            </div> <!--<div class="row"> -->                                                                                      
+                        </form>
+                      </div>
+                    </div><!--/.row-->
+            </div><!-- /.box body -->
+          </div><!-- /.box info -->
+          </div><!--col-->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
+  </div><!-- /.content-wrapper -->
+{% include "footer.html" %}  
+{% endblock producto %}  
+{% endblock content %}
