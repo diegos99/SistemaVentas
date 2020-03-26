@@ -1,0 +1,63 @@
+{% extends "fabricas/base_fabricas_lista.html" %}
+{% block title%}DetalleFabricas{% endblock title %}
+{% block content %}
+{% include "nav.html"%} 
+{% block producto %}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+      <!-- START ALERTS AND CALLOUTS -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <a href="/fabricas/lista_fabricas.html" class="btn btn-success">
+                <span class="glyphicon glyphicon-chevron-left"></span> Regresar
+              </a>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-striped table table-hover ">
+                <tbody>
+                  <!-- <tr class="success">
+                    <td><strong>ID:</strong></td>
+                    <td>{{ clientes.id }}</td>
+                  </tr> -->
+                  <tr class="success">
+                    <td><strong>ID Fábrica</strong></td>
+                    <td>{{ fabricas.id }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>Nombre</strong></td>
+                    <td>{{ fabricas.nombre }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td><strong>IP</strong></td>
+                    <td>{{ fabricas.ip }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  {% include "footer.html" %}
+  {% endblock producto %}
+  {% endblock content %}
+</div>
