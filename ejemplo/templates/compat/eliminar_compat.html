@@ -1,0 +1,37 @@
+{% extends "compat/base_compat_lista.html" %}
+{% block title %}Compats{% endblock title %}
+{% block content %}
+{% include "nav.html" %}
+{% block producto %} 
+<div class="wrapper"> 
+      <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+        <!-- Main content -->
+    <section class="content">          
+      <!-- START ALERTS AND CALLOUTS -->     
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <i class="fa fa-bullhorn"></i>             
+            </div><!-- /.box-header -->
+              <div class="box-body">
+                  <div class="callout callout-success">                                        
+                    <!-- <form method="POST">
+                    {% csrf_token %}
+                      <p class="coloreliminar">¿Desea eliminar al cliente "{{ objeto.nombre }}?</p>
+                      <input type="submit" value="Sí" class="btn btn-warning">                       
+                    </form>  -->                       
+                    <p>Elemento eliminado exitosamente</p>
+                    <a href="/compat/lista_compat.html" class="btn btn-info">Volver</a>
+                  </div>                                   
+              </div><!-- /.box -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
+  </div><!-- /.content-wrapper -->
+
+{% include "footer.html" %}    
+ {% endblock producto %}
+{% endblock content %}
+
