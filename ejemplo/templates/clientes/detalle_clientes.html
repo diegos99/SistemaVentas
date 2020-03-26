@@ -49,7 +49,14 @@
                   </tr>
                   <tr class="success">
                     <td><strong>Patente:</strong></td>
-                    <td><img src="{{ clientes.patente.url }}" style="width: 200px;"></td>
+
+                    <td>
+                      {% if cliente.patente %}
+                      <img src="{{ clientes.patente.url }}" style="width: 200px;">
+                      {% else %}
+                      <p>Null</p>
+                      {% endif %}
+                    </td>
                   </tr>
                   <tr class="success">
                     <td><strong>ID_Tipo:</strong></td>

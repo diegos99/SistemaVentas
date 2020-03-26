@@ -37,19 +37,21 @@
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                      <tr>
+                        <th>ID</th>
                         <th>Nit</th>
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Telefono</th>
                         <th>Patente</th>
-                        <th>ID_Tipo</th>
+                        <th>Tipo</th>
                       </tr>
                     </thead>
                     <tbody>
                     
                       {% for cliente in clientes %}       
 
-                        <tr> 
+                        <tr>
+                          <td>{{ cliente.id }}</td>
                           <td>{{ cliente.nit }}</td>
                           <td>{{ cliente.nombre }}</td>
                           <td>{{ cliente.email }}</td>
