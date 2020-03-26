@@ -37,11 +37,12 @@
                   <table id="example1" class="table table-bordered table-striped">
                     <thead>
                      <tr>
+                        <th>ID Cliente</th>
+                        <th>Cliente</th>
                         <th>Fecha Creacion</th>
                         <th>Fecha Expiracion</th>
                         <th>Estado</th>
-                        <th>ID Cliente</th>
-                        <th>Vencimiento</th>
+                        <th>Días restantes</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -49,10 +50,11 @@
                       {% for suscripcion in suscripciones %}       
 
                         <tr> 
+                          <td>{{ suscripcion.cliente.id }}</td>
+                          <td>{{ suscripcion.cliente.nombre }}</td>
                           <td>{{ suscripcion.fecha_creacion }}</td>
                           <td>{{ suscripcion.fecha_expiracion }}</td>
                           <td>{{ suscripcion.estado }}</td>
-                          <td>{{ suscripcion.cliente }}</td>
                           {% if suscripcion.estadosuscripcion > 30 %}
                                   <td><b style="color:green;">{{suscripcion.estadosuscripcion}} - {{suscripcion.fecha_expiracion|date:'d/m/Y' }}</b></td>
                               {% elif suscripcion.estadosuscripcion <= 30 and suscripcion.estadosuscripcion > 0 %}
