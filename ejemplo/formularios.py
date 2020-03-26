@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 #from django import forms
-from .models import tipocliente , cliente, suscripcion
+from .models import tipocliente , cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad
 
 class FormularioTipoCliente(ModelForm):
 	class Meta:
@@ -16,11 +16,23 @@ class FormularioSuscrip(ModelForm):
 	class Meta:
 		model = suscripcion
 		fields = '__all__'
-		#widgets = {
-		#	'fecha_expiracion': forms.widgets.DateTimeInput(format='%Y-%m-%d %H:%M:%S', attrs={'type':'datetime-local'}),
-		#	'fecha_creacion': forms.widgets.DateTimeInput(format='%Y-%m-%d %H:%M:%S', attrs={'type':'datetime-local'}),
-			# 'fecha_expiracion': forms.DateInput(format='%Y-%m-%d %H:%M:%S', attrs={'class':'form-control', 'id':'Date', 'type':'datetime-local'}),
-			# 'fecha_creacion': forms.DateInput(format='%Y-%m-%d %H:%M:%S', attrs={'class':'form-control', 'id':'Date1', 'type':'datetime-local'}),
-			
-		#	'cliente': forms.Select(attrs={'class': 'form-control'}),
-		#	}
+
+class FormularioFabricas(ModelForm):
+	class Meta:
+		model = fabrica
+		fields = '__all__'
+
+class FormularioRepuestos(ModelForm):
+	class Meta:
+		model = repuesto
+		fields = '__all__'
+
+class FormularioVehiculos(ModelForm):
+	class Meta:
+		model = vehiculo
+		fields = '__all__'
+
+class FormularioCompat(ModelForm):
+	class Meta:
+		model = compatibilidad
+		fields = '__all__'

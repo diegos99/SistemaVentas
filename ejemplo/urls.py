@@ -21,4 +21,32 @@ urlpatterns = [
     path('detalle_suscrip/<int:suscripcion_id>', views.detalle_suscrip),
     path('editar_suscrip/<int:suscripcion_id>', views.editarSuscripcion),
     path('eliminar_suscrip/<int:suscripcion_id>', views.eliminarSuscripcion),
+
+    # FABRICAS
+    path('fabricas/create_fabricas.html', views.formularioAgregarFabrica),
+    path('fabricas/lista_fabricas.html', views.lista_fabricas),
+    path('detalle_fabricas/<int:fabrica_id>', views.detalle_fabricas),
+    path('editar_fabricas/<int:fabrica_id>', views.editarFabrica),
+    path('eliminar_fabricas/<int:fabrica_id>', views.eliminarFabrica),
+
+    # REPUESTOS
+    path('repuestos/create_repuestos.html', views.formularioAgregarRepuesto),
+    path('repuestos/lista_repuestos.html', views.lista_repuestos),
+    path('detalle_repuestos/<int:repuesto_id>', views.detalle_repuestos),
+    path('editar_repuestos/<int:repuesto_id>', views.editarRepuesto),
+    path('eliminar_repuestos/<int:repuesto_id>', views.eliminarRepuesto),
+
+    # VEHICULOS
+    path('vehiculos/create_vehiculos.html', views.formularioAgregarVehiculo),
+    path('vehiculos/lista_vehiculos.html', views.lista_vehiculos),
+    path('detalle_vehiculos/<int:vehiculo_id>', views.detalle_vehiculos),
+    path('editar_vehiculos/<int:vehiculo_id>', views.editarVehiculo),
+    path('eliminar_vehiculos/<int:vehiculo_id>', views.eliminarVehiculo),
+
+    # COMPATIBILIDAD
+    path('compat/create_compat.html', views.formularioAgregarCompat),
+    path('compat/lista_compat.html', views.lista_compats),
+    path('detalle_compat/<int:compatibilidad_id>', views.detalle_compats),
+    path('editar_compat/<int:compatibilidad_id>', views.editarCompat),
+    path('eliminar_compat/<int:compatibilidad_id>', views.eliminarCompat),
 ]
