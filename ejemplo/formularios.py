@@ -36,3 +36,4 @@ class FormularioCompat(ModelForm):
 	class Meta:
 		model = compatibilidad
 		fields = '__all__'
+

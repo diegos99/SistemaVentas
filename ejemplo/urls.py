@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-
+from .views import *
 urlpatterns = [
     path('', views.index),
     # TIPO DE CLIENTE
@@ -49,4 +49,11 @@ urlpatterns = [
     path('detalle_compat/<int:compatibilidad_id>', views.detalle_compats),
     path('editar_compat/<int:compatibilidad_id>', views.editarCompat),
     path('eliminar_compat/<int:compatibilidad_id>', views.eliminarCompat),
+
+    # COMPATIBILIDAD
+    path('factura/crear_factura.html', views.facturaCrear),
+    path('factura/buscar_cliente', views.buscarCliente),
+    path('factura/buscar_producto', views.buscarProducto),
+    path('factura/crear_factura', views.facturaCrear),
+    path('factura/lista_venta.html', ListaVentas.as_view(), name = 'ListaVentas'),
 ]

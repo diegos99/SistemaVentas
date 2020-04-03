@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, connection
+from django.conf import settings
+from django.db.models import signals
 import datetime
 import decimal
 GASTOS_IMPORTACION = 0.15
@@ -17,7 +19,7 @@ class objeto (models.Model):
 	def unicode (self):
 		return self.nombre
 
-#TIPOS DE CLIENTE
+# TIPOS DE CLIENTE
 class tipocliente (models.Model):
 	descripcion = models.CharField(max_length=50)
 	descuento = models.DecimalField(max_digits=5, decimal_places=2)
@@ -26,7 +28,7 @@ class tipocliente (models.Model):
 	
 			
 
-#CLIENTES
+# CLIENTES
 class cliente (models.Model):
 	nit = models.IntegerField(unique=True)
 	nombre = models.CharField(max_length=60)
@@ -38,7 +40,7 @@ class cliente (models.Model):
 		return self.nombre
 	
 		
-#SUSCRIPCIONES		
+# SUSCRIPCIONES		
 class suscripcion(models.Model):	
 	fecha_creacion = models.DateField()
 	fecha_expiracion = models.DateField()
@@ -60,14 +62,14 @@ class suscripcion(models.Model):
 			self.estado = 'vigente'
 			super(suscripcion, self).save(*args, **kwargs)
 
-#FABRICAS
+# FABRICAS
 class fabrica (models.Model):
 	nombre = models.CharField(max_length=100)
 	ip = models.CharField(max_length=100)
 	def __str__ (self):
 		return self.nombre
 
-#REPUESTOS
+# REPUESTOS
 class repuesto(models.Model):
 	nombre = models.CharField(max_length=400)
 	descripcion = models.TextField(max_length=400)
@@ -76,8 +78,11 @@ class repuesto(models.Model):
 	stock = models.PositiveSmallIntegerField()
 	precio_fabricante = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
 	precio_venta = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
-	def __unicode__ (self):
-		return self.id
+	igv = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+	def __str__ (self):
+		return U" %s- %s" % (self.nombre, self.descripcion)
+	""" def __unicode__ (self):
+		return self.id """
 
 	def preeciototal(self):
 		precio_total=self.precio_compra*self.stock
@@ -89,22 +94,90 @@ class repuesto(models.Model):
 			calc2 = round((calc1 + (calc1 * IMPUESTOS)), 2)
 			calc3 = round((calc2 + (calc2 * COMISION)), 2)
 			self.precio_venta = round((calc3 + (calc3 * GANANCIA)), 2)
+			self.igv = round((self.precio_venta * (IVA + GANANCIA)), 2)
 			super(repuesto, self).save(*args, **kwargs)
 		else:
 			self.precio_venta=0
+			self.igv=0
 			super(repuesto, self).save(*args, **kwargs)
 
-#VEHICULOS
+# VEHICULOS
 class vehiculo (models.Model):
 	marca = models.CharField(max_length=100)
 	linea = models.CharField(max_length=100)
 	anio = models.IntegerField()
-	def unicode (self):
-		return self.id
+	def __str__ (self):
+		return U" %s- %s" % (self.marca, self.linea)
+		""" return self.id """
 
-#COMPATIBILIDAD --> REPUESTOS - VEHICULOS
+# COMPATIBILIDAD --> REPUESTOS - VEHICULOS
 class compatibilidad (models.Model):
 	repuesto = models.ForeignKey(repuesto, on_delete=models.PROTECT)
 	vehiculo = models.ForeignKey(vehiculo, on_delete=models.PROTECT)
 	def unicode (self):
 		return self.id
+
+# ADMINISTRADOR
+class administrador (models.Model):
+	nombre = models.CharField(max_length=100)
+	apellido = models.CharField(max_length=100)
+	username = models.CharField(max_length=100)
+	telefono = models.IntegerField()
+	def __str__ (self):
+		return self.username
+
+# VENDEDOR
+class vendedor (models.Model):
+	nombre = models.CharField(max_length=100)
+	apellido = models.CharField(max_length=100)
+	username = models.CharField(max_length=100)
+	telefono = models.IntegerField()
+	administrador = models.ForeignKey(administrador, on_delete=models.PROTECT)
+	def __str__ (self):
+		return self.username
+
+# TIPO DE PAGO
+class tipopago (models.Model):
+	pago = models.CharField(max_length=100)
+	def __str__ (self):
+		return self.pago
+
+
+
+
+
+# -------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+
+#  Factura
+class Factura(models.Model):
+	cliente = models.ForeignKey(cliente, null=True, blank=True, on_delete=models.PROTECT)
+	total = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+	fecha = models.DateField(auto_now_add=True)
+	def __unicode__ (self):
+		return self.id
+
+""" vendedor = models.ForeignKey(vendedor, null=True, blank=True, on_delete=models.PROTECT)
+	tipopago = models.ForeignKey(tipopago, null=True, blank=True, on_delete=models.PROTECT) """
+# Detalle de la factura
+class DetalleFactura(models.Model):
+	factura = models.ForeignKey(Factura, db_column='factura_id', related_name='factura', on_delete=models.PROTECT)
+	producto = models.ForeignKey(repuesto, db_column='repuesto_id', on_delete=models.PROTECT)
+	descripcion = models.CharField(max_length=40)
+	precio = models.DecimalField(max_digits=6, decimal_places=2)
+	cantidad = models.IntegerField()
+	impuesto = models.DecimalField(max_digits=6, decimal_places=2)
+	subtotal = models.DecimalField(max_digits=6, decimal_places=2)
+	def __unicode__ (self):
+		return self.descripcion
+	
+	def suma(self):
+		return self.cantidad * self.producto.precio_venta
+	
+def update_stock(sender, instance, **kwargs):
+		instance.producto.stock -= instance.cantidad
+		instance.producto.save()
+
+signals.post_save.connect(update_stock, sender=DetalleFactura, dispatch_uid="update_stock_count")
