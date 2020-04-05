@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat
-from .models import tipocliente, cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, Factura, DetalleFactura
+from .models import tipocliente, cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, Factura, DetalleFactura, Orden, DetalleOrden
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import connection
@@ -185,9 +185,13 @@ def formularioAgregarRepuesto(request):
         formulario = FormularioRepuestos()
     return render(request, 'repuestos/create_repuestos.html', {'formulario': formulario})
 
-def lista_repuestos(request):
+""" def lista_repuestos(request):
     repuestos = repuesto.objects.all()
-    return render(request, 'repuestos/lista_repuestos.html', {'repuestos': repuestos})
+    return render(request, 'repuestos/lista_repuestos.html', {'repuestos': repuestos}) """
+class lista_repuestos(ListView):
+	context_object_name = 'repuestos'
+	model = repuesto
+	template_name = 'repuestos/lista_repuestos.html'
 
 
 def detalle_repuestos(request, repuesto_id):
@@ -310,6 +314,109 @@ def facturaCrear(request):
             proceso = json.loads(request.POST.get('proceso'))
             print (proceso)
             if 'clienProv' not in proceso:
+                msg = 'La Orden no ha sido seleccionado'
+                raise Exception(msg)
+
+            if len(proceso['detalleorden']) <= 0:
+                msg = 'No se ha seleccionado ningun detalleorden'
+                raise Exception(msg)
+
+            
+
+            for k in proceso['detalleorden']:
+                detalleorden = DetalleOrden.objects.get(id=k['id'])
+                #subTotal = (producto.precio_venta) * int(k['cantidad'])
+                #tot = subTotal + ((producto.igv) * int(k['cantidad']))
+                #total += tot
+            orden=Orden.objects.get(id=proceso['clienProv'])
+            crearFactura = Factura(
+                orden=orden,
+                cliente= orden.cliente,
+                fecha= timezone.now(),
+                total= orden.total,
+            )
+            
+            crearFactura.save()
+            print ("Factura guardado")
+            print (crearFactura.id)
+            for k in proceso['detalleorden']:
+                detalleorden = DetalleOrden.objects.get(id=k['id'])
+                crearDetalle = DetalleFactura(
+                    detalleorden=detalleorden,
+                    producto = detalleorden.producto,
+                    descripcion=detalleorden.descripcion,
+                    fabrica=detalleorden.fabrica,
+                    precio = detalleorden.precio,
+                    cantidad=detalleorden.cantidad,
+                    impuesto=detalleorden.impuesto,
+                    subtotal=detalleorden.subtotal,
+                    factura = crearFactura,
+                    )
+                crearDetalle.save()
+
+            messages.success(
+                request, 'La venta se ha realizado satisfactoriamente')
+
+        except (Exception, e):
+            try:
+                transaction.savepoint_rollback(sid)
+            except:
+                pass
+            messages.error(request, e)
+
+    return render(request, 'factura/crear_factura.html', {'form': form})
+
+# Busqueda de clientes para factura
+def buscarCliente(request):
+    idOrden = request.GET['id']
+    ordenes = Orden.objects.filter(id__contains=idOrden)
+    data = serializers.serialize(
+        'json', ordenes, fields=('id', 'cliente', 'fecha', 'total'))
+    return HttpResponse(data, content_type='application/json')
+
+
+# Busqueda de producto para factura
+def buscarProducto(request):
+    idProducto = request.GET['id']
+    producto = DetalleOrden.objects.filter(id__contains=idProducto)
+    data = serializers.serialize(
+        'json', producto, fields=('id', 'orden', 'producto', 'descripcion', 'fabrica', 'precio', 'cantidad', 'impuesto', 'subtotal'))
+    return HttpResponse(data, content_type='application/json')
+
+# Listado de ventas
+class ListaVentas(ListView):
+    template_name = 'factura/lista_venta.html'
+    model = Factura
+    def get_context_data(self, **kwargs):
+        context = super(ListaVentas, self).get_context_data(**kwargs)
+        context['events'] =Factura.objects.all()
+        context['compras'] = context['events']
+        context['paginate_by']=context['events']
+        return context
+# Detalle de la factura o de la venta
+def reporteventas(request, pk):
+    compra = Factura.objects.get(pk=pk)
+    repuesto = compra.factura.all()
+    hora = datetime.today()
+
+    return render(request, 'factura/reporte_venta.html', locals())
+
+
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+
+# ORDEN DE COMPRA
+@transaction.atomic
+def ordenCrear(request):
+
+    form = None
+    if request.method == 'POST':
+        sid = transaction.savepoint()
+        try:
+            proceso = json.loads(request.POST.get('proceso'))
+            print (proceso)
+            if 'clienProv' not in proceso:
                 msg = 'El cliente no ha sido seleccionado'
                 raise Exception(msg)
 
@@ -326,31 +433,32 @@ def facturaCrear(request):
                     tot = subTotal + ((producto.igv) * int(k['cantidad']))
                     total += tot
             
-                crearFactura = Factura(
+                crearOrden = Orden(
                     cliente=cliente.objects.get(id=proceso['clienProv']),
                     fecha=timezone.now(),
                     total=total
                 )
                 """ vendedores=vendedor.objects.get(id=proceso['vend']),
                     tipos=tipo.objects.get(id=proceso['tip']) """
-                crearFactura.save()
-                print ("Factura guardado")
-                print (crearFactura.id)
+                crearOrden.save()
+                print ("Orden guardado")
+                print (crearOrden.id)
                 for k in proceso['producto']:
                     producto = repuesto.objects.get(id=k['id'])
-                    crearDetalle = DetalleFactura(
+                    crearDetalle = DetalleOrden(
                         producto=producto,
                         descripcion=producto.nombre,
+                        fabrica = producto.fabrica,
                         precio = producto.precio_venta,
                         cantidad=int(k['cantidad']),
                         impuesto=producto.igv * int(k['cantidad']),
                         subtotal=producto.precio_venta * int(k['cantidad']),
-                        factura = crearFactura,
+                        orden = crearOrden,
                         )
                     crearDetalle.save()
 
                 messages.success(
-                    request, 'La venta se ha realizado satisfactoriamente')
+                    request, 'La Orden de compra se ha generado satisfactoriamente')
 
             if proceso['ctipo'] == 1:
                 for k in proceso['producto']:
@@ -359,31 +467,32 @@ def facturaCrear(request):
                     tot = subTotal + ((producto.igv) * int(k['cantidad']))
                     total += tot
             
-                crearFactura = Factura(
+                crearOrden = Orden(
                     cliente=cliente.objects.get(id=proceso['clienProv']),
                     fecha=timezone.now(),
                     total=total - (total * decimal.Decimal(0.1))
                 )
                 """ vendedores=vendedor.objects.get(id=proceso['vend']),
                     tipos=tipo.objects.get(id=proceso['tip']) """
-                crearFactura.save()
-                print ("Factura guardado")
-                print (crearFactura.id)
+                crearOrden.save()
+                print ("Orden guardado")
+                print (crearOrden.id)
                 for k in proceso['producto']:
                     producto = repuesto.objects.get(id=k['id'])
-                    crearDetalle = DetalleFactura(
+                    crearDetalle = DetalleOrden(
                         producto=producto,
                         descripcion=producto.nombre,
+                        fabrica = producto.fabrica,
                         precio = producto.precio_venta,
                         cantidad=int(k['cantidad']),
                         impuesto=producto.igv * int(k['cantidad']),
                         subtotal=producto.precio_venta * int(k['cantidad']),
-                        factura = crearFactura,
+                        orden = crearOrden,
                         )
                     crearDetalle.save()
 
                 messages.success(
-                    request, 'La venta se ha realizado satisfactoriamente')
+                    request, 'La Orden de compra se ha generado satisfactoriamente')
 
             if proceso['ctipo'] == 2:
                 for k in proceso['producto']:
@@ -392,31 +501,32 @@ def facturaCrear(request):
                     tot = subTotal + ((producto.igv) * int(k['cantidad']))
                     total += tot
             
-                crearFactura = Factura(
+                crearOrden = Orden(
                     cliente=cliente.objects.get(id=proceso['clienProv']),
                     fecha=timezone.now(),
                     total=total - (total * decimal.Decimal(0.25))
                 )
                 """ vendedores=vendedor.objects.get(id=proceso['vend']),
                     tipos=tipo.objects.get(id=proceso['tip']) """
-                crearFactura.save()
-                print ("Factura guardado")
-                print (crearFactura.id)
+                crearOrden.save()
+                print ("Orden guardado")
+                print (crearOrden.id)
                 for k in proceso['producto']:
                     producto = repuesto.objects.get(id=k['id'])
-                    crearDetalle = DetalleFactura(
+                    crearDetalle = DetalleOrden(
                         producto=producto,
                         descripcion=producto.nombre,
+                        fabrica = producto.fabrica,
                         precio = producto.precio_venta,
                         cantidad=int(k['cantidad']),
                         impuesto=producto.igv * int(k['cantidad']),
                         subtotal=producto.precio_venta * int(k['cantidad']),
-                        factura = crearFactura,
+                        orden = crearOrden,
                         )
                     crearDetalle.save()
 
                 messages.success(
-                    request, 'La venta se ha realizado satisfactoriamente')
+                    request, 'La Orden de compra se ha generado satisfactoriamente')
 
         except (Exception, e):
             try:
@@ -425,12 +535,11 @@ def facturaCrear(request):
                 pass
             messages.error(request, e)
 
-    return render(request, 'factura/crear_factura.html', {'form': form})
-
-# Busqueda de clientes para factura
+    return render(request, 'orden/crear_factura.html', {'form': form})
 
 
-def buscarCliente(request):
+# Busqueda de clientes para orden
+def buscarClient(request):
     idCliente = request.GET['id']
     clientes = cliente.objects.filter(id__contains=idCliente)
     data = serializers.serialize(
@@ -438,21 +547,30 @@ def buscarCliente(request):
     return HttpResponse(data, content_type='application/json')
 
 
-# Busqueda de producto para factura
-def buscarProducto(request):
+# Busqueda de producto para orden
+def buscarProduct(request):
     idProducto = request.GET['id']
     producto = repuesto.objects.filter(id__contains=idProducto)
     data = serializers.serialize(
         'json', producto, fields=('id','nombre', 'descripcion', 'fabrica', 'precio_venta', 'stock', 'igv'))
     return HttpResponse(data, content_type='application/json')
 
-# Busqueda de ventas
-class ListaVentas(ListView):
-    template_name = 'factura/lista_venta.html'
-    model = Factura
+# Lista de Ordenes
+class ListaOrdenes(ListView):
+    template_name = 'orden/lista_venta.html'
+    model = Orden
     def get_context_data(self, **kwargs):
-        context = super(ListaVentas, self).get_context_data(**kwargs)
-        context['events'] =Factura.objects.all()
+        context = super(ListaOrdenes, self).get_context_data(**kwargs)
+        context['events'] =Orden.objects.all()
         context['compras'] = context['events']
         context['paginate_by']=context['events']
         return context
+
+# Detalle Orden
+def reporteordenes(request, pk):
+    compra = Orden.objects.get(pk=pk)
+    repuesto = compra.orden.all()
+    hora = datetime.today()
+
+    return render(request, 'orden/reporte_orden.html', locals())
+

@@ -31,7 +31,8 @@ urlpatterns = [
 
     # REPUESTOS
     path('repuestos/create_repuestos.html', views.formularioAgregarRepuesto),
-    path('repuestos/lista_repuestos.html', views.lista_repuestos),
+    #path('repuestos/lista_repuestos.html', views.lista_repuestos),
+    path('repuestos/lista_repuestos.html', lista_repuestos.as_view(), name = 'lista_repuestos'),
     path('detalle_repuestos/<int:repuesto_id>', views.detalle_repuestos),
     path('editar_repuestos/<int:repuesto_id>', views.editarRepuesto),
     path('eliminar_repuestos/<int:repuesto_id>', views.eliminarRepuesto),
@@ -50,10 +51,19 @@ urlpatterns = [
     path('editar_compat/<int:compatibilidad_id>', views.editarCompat),
     path('eliminar_compat/<int:compatibilidad_id>', views.eliminarCompat),
 
-    # COMPATIBILIDAD
+    # FACTURAS
     path('factura/crear_factura.html', views.facturaCrear),
     path('factura/buscar_cliente', views.buscarCliente),
     path('factura/buscar_producto', views.buscarProducto),
     path('factura/crear_factura', views.facturaCrear),
     path('factura/lista_venta.html', ListaVentas.as_view(), name = 'ListaVentas'),
+    path('reporte_venta/<int:pk>', views.reporteventas),
+
+    # ORDENES
+    path('orden/crear_factura.html', views.ordenCrear),
+    path('orden/buscar_cliente', views.buscarClient),
+    path('orden/buscar_producto', views.buscarProduct),
+    path('orden/crear_factura', views.ordenCrear),
+    path('orden/lista_venta.html', ListaOrdenes.as_view(), name = 'ListaOrdenes'),
+    path('reporte_orden/<int:pk>', views.reporteordenes),
 ]

@@ -1,5 +1,5 @@
-{% extends "factura/base_factura.html" %}
-{% block title %}Productos{% endblock title %}
+{% extends "orden/base_factura.html" %}
+{% block title %}Ordenes de compra{% endblock title %}
 {% block content %}
 {% include "nav.html" %}
 {% block producto %}    
@@ -9,12 +9,12 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>            
-            Ventas
+            Ordenes de compra
           </h1>
           <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i>Inicio</a></li>
-            <li class="active">Ventas</li>
-            <li><a href="/factura/crear_factura.html">Nuevo</a></li>         
+            <li class="active">Ordenes</li>
+            <li><a href="/orden/crear_factura.html">Nuevo</a></li>         
           </ol>
         </section>
 
@@ -26,7 +26,7 @@
                 <div class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">
-                      <a href="/factura/crear_factura.html" class="btn btn-success">
+                      <a href="/orden/crear_factura.html" class="btn btn-success">
                       Nuevo</a>
                     </h3>
                     <div class="box-tools pull-right">
@@ -37,7 +37,7 @@
                   <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                             <th>No. Factura</th>                  
+                             <th>No. Orden</th>                  
                               <th>Cliente</th> 
                               <th>Fecha</th> 
                               <th>Total</th>
@@ -53,7 +53,7 @@
                               <td>{{ c.total }}</td>                      
                               <td class="text-right">
                                   
-                                  <a href="/reporte_venta/{{ c.id }}" class="btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                  <a href="/reporte_orden/{{ c.id }}" class="btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>
                                   
                               </td>
                           </tr>

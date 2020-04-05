@@ -151,21 +151,49 @@ class tipopago (models.Model):
 # -------------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------------
 
-#  Factura
-class Factura(models.Model):
+# ORDEN DE COMPRA
+class Orden(models.Model):
 	cliente = models.ForeignKey(cliente, null=True, blank=True, on_delete=models.PROTECT)
 	total = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
 	fecha = models.DateField(auto_now_add=True)
 	def __unicode__ (self):
 		return self.id
 
-""" vendedor = models.ForeignKey(vendedor, null=True, blank=True, on_delete=models.PROTECT)
-	tipopago = models.ForeignKey(tipopago, null=True, blank=True, on_delete=models.PROTECT) """
-# Detalle de la factura
-class DetalleFactura(models.Model):
-	factura = models.ForeignKey(Factura, db_column='factura_id', related_name='factura', on_delete=models.PROTECT)
+# DETALLE ORDEN DE COMPRA
+class DetalleOrden(models.Model):
+	orden = models.ForeignKey(Orden, db_column='orden_id', related_name='orden', on_delete=models.PROTECT)
 	producto = models.ForeignKey(repuesto, db_column='repuesto_id', on_delete=models.PROTECT)
 	descripcion = models.CharField(max_length=40)
+	fabrica = models.ForeignKey(fabrica, null=True, blank=True, on_delete=models.PROTECT)
+	precio = models.DecimalField(max_digits=6, decimal_places=2)
+	cantidad = models.IntegerField()
+	impuesto = models.DecimalField(max_digits=6, decimal_places=2)
+	subtotal = models.DecimalField(max_digits=6, decimal_places=2)
+	def __unicode__ (self):
+		return self.descripcion
+	
+	def suma(self):
+		return self.cantidad * self.producto.precio_venta
+
+
+
+#  FACTURA
+class Factura(models.Model):
+	orden = models.ForeignKey(Orden, null=True, blank=True, on_delete=models.PROTECT)
+	cliente = models.ForeignKey(cliente, db_column='cliente_id', on_delete=models.PROTECT)
+	total = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+	fecha = models.DateField(auto_now_add=True)
+	def __unicode__ (self):
+		return self.id
+
+
+# DETALLE
+class DetalleFactura(models.Model):
+	factura = models.ForeignKey(Factura, db_column='factura_id', related_name='factura', on_delete=models.PROTECT)
+	detalleorden = models.ForeignKey(DetalleOrden, db_column='detalleorden_id', related_name='detalleorden', on_delete=models.PROTECT)
+	producto = models.ForeignKey(repuesto, db_column='repuesto_id', on_delete=models.PROTECT)
+	descripcion = models.CharField(max_length=40)
+	fabrica = models.ForeignKey(fabrica, null=True, blank=True, on_delete=models.PROTECT)
 	precio = models.DecimalField(max_digits=6, decimal_places=2)
 	cantidad = models.IntegerField()
 	impuesto = models.DecimalField(max_digits=6, decimal_places=2)

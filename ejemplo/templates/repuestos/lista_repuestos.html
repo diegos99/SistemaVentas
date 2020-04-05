@@ -43,8 +43,9 @@
                         <th>No. Parte</th>
                         <th>Stock</th>
                         <th>Fabrica</th>
-                        <th>Precio Fabricante (Q)</th>
-                        <th>Precio Venta (Q)</th>
+                        <th>Precio Fabricante(Q)</th>
+                        <th>Precio Venta(Q)</th>
+                        <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -56,12 +57,11 @@
                           <td>{{ repuesto.nombre }}</td>
                           <td>{{ repuesto.descripcion }}</td>
                           <td>{{ repuesto.no_parte }}</td>
-
                           {% if repuesto.stock >= 0 and repuesto.stock < 10 %}                             
-                              <td><b style="color:red;">{{ repuesto.stock}}</b></td>   
-                              {% elif repuesto.stock >= 10 and repuesto.stock < 50 %}
+                              <td><b style="color:red;">{{ repuesto.stock}}</b></td>
+                          {% elif repuesto.stock >= 10 and repuesto.stock < 50 %}
                                <td><b style="color:rgb(243, 156, 18);">{{ repuesto.stock}}</b></td>
-                               {% else %}
+                          {% else %}
                                <td><b style="color:green;">{{ repuesto.stock}}</b></td>
                           {% endif %}
                           <td>{{ repuesto.fabrica }}</td>
@@ -73,6 +73,7 @@
                             <a href="/editar_repuestos/{{ repuesto.id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>                            
                             <a href="/eliminar_repuestos/{{ repuesto.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>                              
                            </td>
+                        </tr>
                       {% endfor %}
                     </tbody>
 

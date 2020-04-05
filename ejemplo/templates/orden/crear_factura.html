@@ -1,5 +1,5 @@
-{% extends 'factura/base_factura.html' %}
-{% block title %}RealizarVenta{% endblock title %}
+{% extends 'orden/base_factura.html' %}
+{% block title %}RealizarOrdenCompra{% endblock title %}
 {% block content %}
 {% include "nav.html" %}
 
@@ -10,12 +10,12 @@
          <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>            
-            Factura
+            Orden de compra
           </h1>
           <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="/factura/lista_venta.html">Ventas</a></li>
-            <li class="active">Crear Ventas</li>
+            <li><a href="/orden/lista_venta.html">Ordenes</a></li>
+            <li class="active">Crear Orden</li>
           </ol>
         </section>
 
@@ -57,12 +57,12 @@
             <!-- info row -->
             <div class="row invoice-info">
                 <div class="col-sm-4 invoice-col">
-                    <b>Factura</b> <br/>
+                    <b>Orden</b> <br/>
 
                     <!-- Serie:<input name="p-serie" id="p-serie" placeholder="Serie" type="text" required="true"><br/>
                     Num:<input name="p-num" id="p-num" placeholder="Numero" type="text" required="true"> -->
                     <br/>
-                    <b>Fecha de compra:</b> {% now "d/m/Y" %}<br/><br/>
+                    <b>Fecha de orden:</b> {% now "d/m/Y" %}<br/><br/>
                     
 
                     <!-- Modal -->
@@ -74,11 +74,11 @@
                                         <span aria-hidden="true">&times;</span>
                                         <span class="sr-only">Cancelar</span>
                                     </button>
-                                    <h4 class="modal-title" id="myModalLabel">Buscar Detalle</h4>
+                                    <h4 class="modal-title" id="myModalLabel">Buscar Repuestos</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="input-group">
-                                        <input name="producto" id="producto-id" class="form-control" placeholder="Ingrese id del detalle" type="text">
+                                        <input name="producto" id="producto-id" class="form-control" placeholder="Ingrese id del repuesto" type="text">
                                         <span class="input-group-btn">
                                             <button name="seach" id="p-buscar" class="btn btn-flat"><i class="fa fa-search"></i></button>
                                         </span>
@@ -99,13 +99,13 @@
 
 
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#buscarProductoModal">
-                        Seleccionar Detalle
+                        Seleccionar Repuestos
                     </button>
 
                 </div><!-- /.col -->
 
                 <div class="col-sm-4 invoice-col">
-                    <strong>Orden de compra</strong>
+                    <strong>Cliente</strong>
                     <!-- Modal -->
                     <div class="modal fade" id="buscarClienteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -115,11 +115,11 @@
                                         <span aria-hidden="true">&times;</span>
                                         <span class="sr-only">Cancelar</span>
                                     </button>
-                                    <h4 class="modal-title" id="myModalLabel">Buscar Orden</h4>
+                                    <h4 class="modal-title" id="myModalLabel">Buscar Cliente</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="input-group">
-                                        <input name="cliente" id="cliente-id" class="form-control" placeholder="Ingrese numero de orden" type="text">
+                                        <input name="cliente" id="cliente-id" class="form-control" placeholder="Ingrese id del cliente" type="text">
                                         <span class="input-group-btn">
                                             <button name="seach" id="c-buscar" class="btn btn-flat"><i class="fa fa-search"></i></button>
                                         </span>
@@ -151,7 +151,7 @@
                                     <h4 class="modal-title" id="myModalLabel">Crear Producto</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/factura/crear_factura" method="post">
+                                    <form action="/orden/crear_factura" method="post">
                                         {% csrf_token %}
                                         {{ form }}
                                         <input type="submit" value="Guardar" />
@@ -167,10 +167,12 @@
                     </div>
                                         
                     <br>
-                    No.Orden: <span id="c-id"></span><br/>
-                    Cliente: <span id="c-cli"></span><br/>
-                    Fecha: <span id="c-fech"></span><br/>
-                    Total: <span id="c-tot"></span><br/>
+                    Id: <span id="c-id"></span><br/>
+                    Nit: <span id="c-nit"></span><br/>
+                    nombre: <span id="c-nombre"></span><br/>
+                    email: <span id="c-email"></span><br/>
+                    telefono: <span id="c-telefono"></span><br/>
+                    tipo: <span id="c-tipo"></span><br/>
                 </div><!-- /.col -->
 
 
@@ -211,16 +213,38 @@
                         No se realiza cambio ni devolución de dinero por los productos adquiridos, por favor verifique el estado de cada uno de los items de su compra.
                     </p>
                 </div><!-- /.col -->
-                
+                <div class="col-xs-6">
+                    <p class="lead">Totales de la compra</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <th style="width:50%">Subtotal:</th>
+                                <td align="center"> <label id='sum-subtotal'>.00</label></td>
+                            </tr>
+                            <tr>
+                                <th>IVA(12%) + Ganancia (40%)</th>
+                                <td align="center"><label id='sum-tax'>.00</label></td>
+                            </tr>
+                            <tr>
+                                <th>Total sin descuento: Q</th>
+                                <td align="center"><label id='sum-total'>.00</label></td>
+                            </tr>
+                            <tr>
+                                <th>Total con descuento: Q</th>
+                                <td align="center"><label id='desc'>.00</label></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div><!-- /.col -->
             </div><!-- /.row -->
 
             <!-- this row will not appear when printing -->
             <div class="row no-print">
                 <div class="col-xs-12">
-                    <form action="/factura/crear_factura" method="post" onsubmit="onEnviar()">
+                    <form action="/orden/crear_factura" method="post" onsubmit="onEnviar()">
                         {% csrf_token %}
                         <input id="proceso" name="proceso" type="hidden" />
-                        <button class="btn btn-success pull-right" id="comprar"><i class="fa fa-credit-card"></i> Realizar Venta</button>  
+                        <button class="btn btn-success pull-right" id="comprar"><i class="fa fa-credit-card"></i> Generar Orden</button>  
                     </form>
                     <button class="btn btn-primary pull-right"
                         style="margin-right: 5px;" onclick="window.print();"><i

@@ -62,10 +62,10 @@
         var proceso = new Object();
 
         proceso.tipoPro = 1;
-        proceso.detalleorden = new Array();
+        proceso.producto = new Array();
 
         var table = new Array();
-        var Orden = new Object();
+        var cliente = new Object();
 
         $(document).ready(function(){
             $("#c-buscar").click(function () {          
@@ -80,20 +80,24 @@
                         var html = ""
                         if(data.length != 0){
                             for (var i = 0; i < data.length; i++) {
-                                html += '<strong>Orden de compra</strong><br>';
+                                html += '<strong>Cliente</strong><br>';
                                 html += 'id: ' + data[i].pk + '<br>';
-                                html += 'cliente: ' + data[i].fields.cliente + '<br>';
-                                html += 'fecha: ' + data[i].fields.fecha + '<br>';
-                                html += 'total: ' + data[i].fields.total + '<br>';
+                                html += 'nombre: ' + data[i].fields.nombre + '<br>';
+                                html += 'nit: ' + data[i].fields.nit + '<br>';
+                                html += 'email: ' + data[i].fields.email + '<br>';
+                                html += 'telefono: ' + data[i].fields.telefono + '<br>';
+                                html += 'tipo: ' + data[i].fields.tipo + '<br>';
 
-                                Orden.pk = data[i].pk
-                                Orden.cliente = data[i].fields.cliente;
-                                Orden.fecha = data[i].fields.fecha;
-                                Orden.total = data[i].fields.total;
+                                cliente.pk = data[i].pk
+                                cliente.nombre = data[i].fields.nombre;
+                                cliente.nit = data[i].fields.nit;
+                                cliente.email = data[i].fields.email;
+                                cliente.telefono = data[i].fields.telefono;
+                                cliente.tipo = data[i].fields.tipo;
                             }  
                             $("#c-seleccionar").attr("disabled", false);
                         }else{
-                            html += '<strong>No existe ninguna orden con ese numero de identificación</strong><br><button class="btn btn-primary" style="margin-right: 5px;"> Crear Usuario</button>';
+                            html += '<strong>No existe un cliente con ese numero de identificación</strong><br><button class="btn btn-primary" style="margin-right: 5px;"> Crear Usuario</button>';
                             $("#c-seleccionar").attr("disabled", true);
                         }
                         $('#cliente-resultado').html(html); 
@@ -103,17 +107,21 @@
 
             $("#c-seleccionar").click(function () {
                 //console.log(cliente.numIdentificacion);
-                proceso.clienProv = Orden.pk;
+                proceso.clienProv = cliente.pk;
+                proceso.ctipo = cliente.tipo
                 /* proceso.vend = vendedor.pk;
                 proceso.tip = tipo.pk; */
-                $("#c-id").text(Orden.pk);
-                $("#c-cli").text(Orden.cliente);
-                $("#c-fech").text(Orden.fecha);
-                $("#c-tot").text(Orden.total);
+                $("#c-id").text(cliente.pk);
+                $("#c-nit").text(cliente.nit);
+                $("#c-nombre").text(cliente.nombre);
+                $("#c-email").text(cliente.email);
+                $("#c-telefono").text(cliente.telefono);
+                $("#c-tipo").text(cliente.tipo);
                 $('#buscarClienteModal').modal('hide');
             });
 
             $("#p-buscar").click(function () {
+                console.log('hola' + proceso)
                 var id = $('#producto-id').val();
                 $.ajax({
                     data: {'id':id},
@@ -124,34 +132,28 @@
                         var html = ""
                         if(data.length != 0){
                             for (var i = 0; i < data.length; i++) {
-                                html += '<br><strong>Detalles</strong><br>';
+                                html += '<br><strong>Repuestos</strong><br>';
                                 html += 'ID: ' + data[i].pk + '<br>';
-                                html += 'No.Orden: ' + data[i].fields.orden + '<br>';
-                                html += 'Repuesto: ' + data[i].fields.producto + '<br>';
-                                html += 'Descripcion: ' + data[i].fields.descripcion + '<br>';
+                                html += 'Nombre: ' + data[i].fields.nombre + '<br>';
+                                html += 'Precio Venta: ' + data[i].fields.precio_venta + '<br>';
+                                html += 'stock: ' + data[i].fields.stock + '<br>';
                                 html += 'Fabrica: ' + data[i].fields.fabrica + '<br>';
-                                html += 'Precio: ' + data[i].fields.precio + '<br>';
-                                html += 'Cantidad: ' + data[i].fields.cantidad + '<br>';
-                                html += 'Impuesto: ' + data[i].fields.impuesto + '<br>';
-                                html += 'Subtotal: ' + data[i].fields.subtotal + '<br>';
+                                html += '<input name="p-cantidad" id="p-cantidad" placeholder="Cantidad" type="text">';
 
                                 var fila = new Object();
                                 fila.pk = data[i].pk;
-                                fila.orden = data[i].fields.orden;
-                                fila.producto = data[i].fields.producto;
-                                fila.descripcion = data[i].fields.descripcion;
-                                fila.fabrica = data[i].fields.fabrica;
-                                fila.precio = data[i].fields.precio;
-                                fila.cantidad = data[i].fields.cantidad;
-                                fila.impuesto = data[i].fields.impuesto;
-                                fila.subtotal = data[i].fields.subtotal;
+                                fila.nombre = data[i].fields.nombre;
+                                fila.precio_venta = data[i].fields.precio_venta;
+                                fila.igv = data[i].fields.igv;
+                                fila.cantidad = 1;
+                                fila.fabrica = data[i].fields.fabrica
 
                                 table.push(fila);
                             }
                             $('#producto-resultado').html(html); 
                             $("#p-seleccionar").attr("disabled", false);
                         }else{
-                            html += '<strong>No existe detalle con ese code</strong><br>';
+                            html += '<strong>No existe repuesto con ese code</strong><br>';
                             //html += '<a class="btn btn-primary" style="margin-right: 5px;" href=""> Crear Producto</a>';
                             
                             $("#p-seleccionar").attr("disabled", true);
@@ -178,15 +180,23 @@
                 var cell7 = row.insertCell(6);
                 var cell8 = row.insertCell(7);
                 //cell7.className = 'right';
+                cell4.setAttribute('align','left');
+                cell5.setAttribute('align','left');
+                cell6.setAttribute('align','left');
+                cell7.setAttribute('align','left');
 
                 cell1.innerHTML = rowCount+1;
-                cell2.innerHTML = d[d.length-1].descripcion;
+                cell2.innerHTML = d[d.length-1].nombre;
                 cell3.innerHTML = d[d.length-1].pk;
-                cell4.innerHTML = d[d.length-1].precio;
-                cell5.innerHTML = d[d.length-1].cantidad;
-                cell6.innerHTML = d[d.length-1].impuesto;
-                cell7.innerHTML = d[d.length-1].subtotal;
-                
+                cell4.innerHTML = "$" + [round(d[d.length-1].precio_venta,2).toFixed(2)];
+
+                if($('#p-cantidad').val() == ''){
+                    d[d.length-1].cantidad = 1;
+                    cell5.innerHTML = d[d.length-1].cantidad;
+                }else{
+                    d[d.length-1].cantidad = $('#p-cantidad').val();
+                    cell5.innerHTML = d[d.length-1].cantidad;
+                }
                 /*
                 $.ajax({
                     data: {'descuento': $('#p-cantidad').val()},
@@ -201,6 +211,8 @@
                     }
                 }); 
                 */
+                cell6.innerHTML = round(d[d.length-1].igv*d[d.length-1].cantidad*1,2).toFixed(2);
+                cell7.innerHTML = round((d[d.length-1].precio_venta)*d[d.length-1].cantidad*1,2).toFixed(2);
 
                 var html = ""
                 $('#producto-resultado').html(html);
@@ -217,7 +229,8 @@
                     }   
                 });
                 */
-                proceso.detalleorden.push({'id': d[d.length-1].pk, 'cantidad': d[d.length-1].cantidad});          
+                proceso.producto.push({'id': d[d.length-1].pk, 'cantidad': d[d.length-1].cantidad});
+                calTotal();           
             });
                
 
@@ -230,6 +243,62 @@
             console.log(JSON.stringify(proceso));
            document.getElementById("proceso").value=JSON.stringify(proceso);
         }
+
+        var total = 0;
+        function calTotal(){
+            var total=0;
+            var t=0;
+            $('#tb-detalle tbody tr').each(function () {
+                total = total*1 + $(this).find("td").eq(6).html()*1;    
+                t = t*1 + $(this).find("td").eq(5).html()*1; 
+                descuento1 = (total + t) - ((total + t) * 0.10);
+                descuento2 = (total + t) - ((total + t) * 0.25);
+                descuento3 = (total + t) - ((total + t) * 1);
+                console.log(total);
+            });
+            $('#sum-subtotal').text((total));
+            $('#sum-tax').text(t.toFixed(2));
+
+            $('#sum-total').text(total+t);
+            
+            if(cliente.tipo == 1){
+                    console.log('es cliente tipo 1');
+                    console.log(descuento1)
+                    $('#desc').text(descuento1);
+                }
+                if(cliente.tipo == 2){
+                    console.log('es cliente tipo 2');
+                    console.log(descuento2)
+                    $('#desc').text(descuento2);
+                }
+                if(cliente.tipo == 3){
+                    console.log('es cliente tipo 3');
+                    console.log(descuento3)
+                    $('#desc').text(descuento3);
+                }
+
+
+        }
+
+    function round(value, exp) {
+      if (typeof exp === 'undefined' || +exp === 0)
+        return Math.round(value);
+
+      value = +value;
+      exp  = +exp;
+
+      if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+        return NaN;
+
+      // Shift
+      value = value.toString().split('e');
+      value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+      // Shift back
+      value = value.toString().split('e');
+      return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+    }
+
 </script>
 
 
