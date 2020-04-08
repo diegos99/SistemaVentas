@@ -3,6 +3,10 @@ from . import views
 from .views import *
 urlpatterns = [
     path('', views.index),
+    path('login', views.loginPage, name='login'),
+    path('register', views.registerPage, name='register'),
+    path('logout', views.logoutUser, name='logout'),
+
     # TIPO DE CLIENTE
     path('clientes/create_tipo_cliente.html', views.formularioAgregarTipoCliente),
     path('clientes/lista_tipo_cliente.html', views.lista_tipo_clientes),

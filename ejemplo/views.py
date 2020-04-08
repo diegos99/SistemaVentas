@@ -1,12 +1,17 @@
-from django.shortcuts import render
-from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat
+from django.shortcuts import render, redirect
+from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat, CreateUserForm
 from .models import tipocliente, cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, Factura, DetalleFactura, Orden, DetalleOrden
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import connection
 from django.db import transaction
 from django.core import serializers
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.template import RequestContext
 from django.template import RequestContext as ctx
@@ -19,11 +24,53 @@ import decimal
 from django.utils import timezone
 import json
 
-# TIPO DE CLIENTE.
+# INDEX Y LOGIN Y REGISTER
+@unauthenticated_user
+def registerPage(request):
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+
+            group = Group.objects.get(name='vendedor')
+            user.groups.add(group)
+
+            messages.success(request, 'Account was creater for' + username)
+
+            return redirect('login')
+    context = {'form': form}
+    return render(request, 'register.html', context)
+
+@unauthenticated_user
+def loginPage(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, 'Username OR password is incorrect')
+    context = {}
+    return render(request, 'login.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+
+
+@login_required(login_url='login')
 def index(request):
     return render(request, 'ejemplo/index.html')
 
-
+# TIPO DE CLIENTE.
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def formularioAgregarTipoCliente(request):
     if request.method == "POST":
         formulario = FormularioTipoCliente(request.POST)
@@ -33,7 +80,8 @@ def formularioAgregarTipoCliente(request):
         formulario = FormularioTipoCliente()
     return render(request, 'clientes/create_tipo_cliente.html', {'formulario': formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def lista_tipo_clientes(request):
 	cursor = connection.cursor()
 	cursor.execute("SELECT id, descripcion, descuento FROM ejemplo_tipocliente")
@@ -42,7 +90,8 @@ def lista_tipo_clientes(request):
 	# tipoclientes = tipocliente.objects.all()
 	# return render(request, 'clientes/lista_tipo_cliente.html', {'tipoclientes': tipoclientes})
     
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def editarTipoCliente(request, tipo_cliente_id):
     tipoclientes = tipocliente.objects.get(id=tipo_cliente_id)
     if request.method == "POST":
@@ -57,6 +106,8 @@ def editarTipoCliente(request, tipo_cliente_id):
 
 
 # CLIENTES
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def formularioAgregarCliente(request):
     if request.method == "POST":
         formulario = FormularioCliente(request.POST, request.FILES or None)
@@ -66,17 +117,20 @@ def formularioAgregarCliente(request):
         formulario = FormularioCliente()
     return render(request, 'clientes/create_update_clientes.html', {'formulario': formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def lista_clientes(request):
     clientes = cliente.objects.all()
     return render(request, 'clientes/lista_cliente.html', {'clientes': clientes})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def detalle_clientes(request, cliente_id):
     clientes = cliente.objects.get(id=cliente_id)
     return render(request, 'clientes/detalle_clientes.html', {'clientes': clientes})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def editarCliente(request, cliente_id):
     clientes = cliente.objects.get(id=cliente_id)
     if request.method == "POST":
@@ -89,7 +143,8 @@ def editarCliente(request, cliente_id):
         formulario = FormularioCliente(instance=clientes)
         return render(request, "clientes/editar_cliente.html", {"formulario": formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def eliminarCliente(request, cliente_id):
     clientes = cliente.objects.get(id=cliente_id)
     clientes.delete()
@@ -97,6 +152,8 @@ def eliminarCliente(request, cliente_id):
 
 
 # SUSCRIPCIONES
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def formularioAgregarSuscrip(request):
     if request.method == "POST":
         formulario = FormularioSuscrip(request.POST)
@@ -106,17 +163,20 @@ def formularioAgregarSuscrip(request):
         formulario = FormularioSuscrip()
     return render(request, 'suscripciones/create_suscrip.html', {'formulario': formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def lista_suscripciones(request):
     suscripciones = suscripcion.objects.all()
     return render(request, 'suscripciones/lista_suscrip.html', {'suscripciones': suscripciones})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def detalle_suscrip(request, suscripcion_id):
     suscripciones = suscripcion.objects.get(id=suscripcion_id)
     return render(request, 'suscripciones/detalle_suscrip.html', {'suscripciones': suscripciones})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def editarSuscripcion(request, suscripcion_id):
     suscripciones = suscripcion.objects.get(id=suscripcion_id)
     if request.method == "POST":
@@ -128,7 +188,8 @@ def editarSuscripcion(request, suscripcion_id):
         formulario = FormularioSuscrip(instance=suscripciones)
         return render(request, "suscripciones/editar_suscrip.html", {"formulario": formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def eliminarSuscripcion(request, suscripcion_id):
     suscripciones = suscripcion.objects.get(id=suscripcion_id)
     suscripciones.delete()
@@ -136,6 +197,8 @@ def eliminarSuscripcion(request, suscripcion_id):
 
 
 #FABRICAS
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def formularioAgregarFabrica(request):
     if request.method == "POST":
         formulario = FormularioFabricas(request.POST)
@@ -145,16 +208,20 @@ def formularioAgregarFabrica(request):
         formulario = FormularioFabricas()
     return render(request, 'fabricas/create_fabricas.html', {'formulario': formulario})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def lista_fabricas(request):
     fabricas = fabrica.objects.all()
     return render(request, 'fabricas/lista_fabricas.html', {'fabricas': fabricas})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def detalle_fabricas(request, fabrica_id):
     fabricas = fabrica.objects.get(id=fabrica_id)
     return render(request, 'fabricas/detalle_fabricas.html', {'fabricas': fabricas})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def editarFabrica(request, fabrica_id):
     fabricas = fabrica.objects.get(id=fabrica_id)
     if request.method == "POST":
@@ -167,7 +234,8 @@ def editarFabrica(request, fabrica_id):
         formulario = FormularioFabricas(instance=fabricas)
         return render(request, "fabricas/editar_fabricas.html", {"formulario": formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def eliminarFabrica(request, fabrica_id):
     fabricas = repuesto.objects.get(id=fabrica_id)
     fabricas.delete()
@@ -176,6 +244,8 @@ def eliminarFabrica(request, fabrica_id):
 
 
 #REPUESTOS
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def formularioAgregarRepuesto(request):
     if request.method == "POST":
         formulario = FormularioRepuestos(request.POST)
@@ -193,12 +263,14 @@ class lista_repuestos(ListView):
 	model = repuesto
 	template_name = 'repuestos/lista_repuestos.html'
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def detalle_repuestos(request, repuesto_id):
     repuestos = repuesto.objects.get(id=repuesto_id)
     return render(request, 'repuestos/detalle_repuestos.html', {'repuestos': repuestos})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def editarRepuesto(request, repuesto_id):
     repuestos = repuesto.objects.get(id=repuesto_id)
     if request.method == "POST":
@@ -211,7 +283,8 @@ def editarRepuesto(request, repuesto_id):
         formulario = FormularioRepuestos(instance=repuestos)
         return render(request, "repuestos/editar_repuestos.html", {"formulario": formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def eliminarRepuesto(request, repuesto_id):
     repuestos = repuesto.objects.get(id=repuesto_id)
     repuestos.delete()
@@ -219,6 +292,8 @@ def eliminarRepuesto(request, repuesto_id):
 
 
 #VEHICULOS
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def formularioAgregarVehiculo(request):
     if request.method == "POST":
         formulario = FormularioVehiculos(request.POST)
@@ -228,16 +303,20 @@ def formularioAgregarVehiculo(request):
         formulario = FormularioVehiculos()
     return render(request, 'vehiculos/create_vehiculos.html', {'formulario': formulario})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def lista_vehiculos(request):
     vehiculos = vehiculo.objects.all()
     return render(request, 'vehiculos/lista_vehiculos.html', {'vehiculos': vehiculos})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def detalle_vehiculos(request, vehiculo_id):
     vehiculos = vehiculo.objects.get(id=vehiculo_id)
     return render(request, 'vehiculos/detalle_vehiculos.html', {'vehiculos': vehiculos})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def editarVehiculo(request, vehiculo_id):
     vehiculos = vehiculo.objects.get(id=vehiculo_id)
     if request.method == "POST":
@@ -250,7 +329,8 @@ def editarVehiculo(request, vehiculo_id):
         formulario = FormularioVehiculos(instance=vehiculos)
         return render(request, "vehiculos/editar_vehiculos.html", {"formulario": formulario})
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def eliminarVehiculo(request, vehiculo_id):
     vehiculos = vehiculo.objects.get(id=vehiculo_id)
     vehiculos.delete()
@@ -258,6 +338,8 @@ def eliminarVehiculo(request, vehiculo_id):
 
 
 #COMPATIBILIDAD
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def formularioAgregarCompat(request):
     if request.method == "POST":
         formulario = FormularioCompat(request.POST)
@@ -267,6 +349,8 @@ def formularioAgregarCompat(request):
         formulario = FormularioCompat()
     return render(request, 'compat/create_compat.html', {'formulario': formulario})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def lista_compats(request):
 	cursor = connection.cursor()
 	cursor.execute("SELECT  ejemplo_compatibilidad.id, ejemplo_repuesto.id, ejemplo_repuesto.nombre, ejemplo_repuesto.descripcion, ejemplo_vehiculo.id, ejemplo_vehiculo.marca, ejemplo_vehiculo.linea, ejemplo_vehiculo.anio FROM ejemplo_compatibilidad INNER JOIN ejemplo_repuesto ON ejemplo_compatibilidad.repuesto_id = ejemplo_repuesto.id INNER JOIN ejemplo_vehiculo ON ejemplo_compatibilidad.vehiculo_id = ejemplo_vehiculo.id;")
@@ -275,11 +359,15 @@ def lista_compats(request):
 	# compatibilidades = compatibilidad.objects.all()
     # return render(request, 'compat/lista_compat.html', {'compatibilidades': compatibilidades})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def detalle_compats(request, compatibilidad_id):
     compatibilidades = compatibilidad.objects.get(id=compatibilidad_id)
     return render(request, 'compat/detalle_compat.html', {'compatibilidades': compatibilidades})
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def editarCompat(request, compatibilidad_id):
     compatibilidades = compatibilidad.objects.get(id=compatibilidad_id)
     if request.method == "POST":
@@ -293,6 +381,8 @@ def editarCompat(request, compatibilidad_id):
         return render(request, "compat/editar_compat.html", {"formulario": formulario})
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def eliminarCompat(request, compatibilidad_id):
     compatibilidades = compatibilidad.objects.get(id=compatibilidad_id)
     compatibilidades.delete()
@@ -304,6 +394,8 @@ def eliminarCompat(request, compatibilidad_id):
 # ---------------------------------------------------------------------------------
 
 # FACTURA
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 @transaction.atomic
 def facturaCrear(request):
 
@@ -367,6 +459,8 @@ def facturaCrear(request):
     return render(request, 'factura/crear_factura.html', {'form': form})
 
 # Busqueda de clientes para factura
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def buscarCliente(request):
     idOrden = request.GET['id']
     ordenes = Orden.objects.filter(id__contains=idOrden)
@@ -376,6 +470,8 @@ def buscarCliente(request):
 
 
 # Busqueda de producto para factura
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def buscarProducto(request):
     idProducto = request.GET['id']
     producto = DetalleOrden.objects.filter(id__contains=idProducto)
@@ -394,6 +490,8 @@ class ListaVentas(ListView):
         context['paginate_by']=context['events']
         return context
 # Detalle de la factura o de la venta
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def reporteventas(request, pk):
     compra = Factura.objects.get(pk=pk)
     repuesto = compra.factura.all()
@@ -407,6 +505,8 @@ def reporteventas(request, pk):
 # ---------------------------------------------------------------------------------
 
 # ORDEN DE COMPRA
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 @transaction.atomic
 def ordenCrear(request):
 
@@ -539,6 +639,8 @@ def ordenCrear(request):
 
 
 # Busqueda de clientes para orden
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def buscarClient(request):
     idCliente = request.GET['id']
     clientes = cliente.objects.filter(id__contains=idCliente)
@@ -548,6 +650,8 @@ def buscarClient(request):
 
 
 # Busqueda de producto para orden
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def buscarProduct(request):
     idProducto = request.GET['id']
     producto = repuesto.objects.filter(id__contains=idProducto)
@@ -567,6 +671,8 @@ class ListaOrdenes(ListView):
         return context
 
 # Detalle Orden
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
 def reporteordenes(request, pk):
     compra = Orden.objects.get(pk=pk)
     repuesto = compra.orden.all()
