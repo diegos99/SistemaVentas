@@ -1,0 +1,83 @@
+{% extends "compras/base_compras.html" %}
+{% block title %}Productos{% endblock title %}
+{% block content %}
+{% include "nav.html" %}
+{% block producto %}    
+
+    <div class="wrapper"> 
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>            
+            Compras
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i>Inicio</a></li>
+            <li class="active">Compras</li>
+            <li><a href="/compras/crear_compras.html">Nuevo</a></li>
+            
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">
+                      <a href="/compras/crear_compras.html" class="btn btn-success">
+                      Nuevo</a>
+                    </h3>
+                    <div class="box-tools pull-right">
+                      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div><!-- /.box-tools -->
+                  </div><!-- /.box-header -->
+                  <div class="box-body">
+                    <p>info proveniente del API del sistema de fabrica <strong>{{ fabrica }}</strong></p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                  <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                             <th>Id</th>
+                              <th>Fecha Envio</th>                       
+                              <th>Producto</th> 
+                              <th>Descripcion</th> 
+                              <th>Cantidad</th>
+                           </tr>
+                        </thead>
+                      <tbody> 
+                      {% for c in fabrica %}
+                          <tr> 
+                              <td>{{ c.id }}</td>
+                              <td>{{ c.fechaEnvio }} </td> 
+                              <td>{{ c.producto }}</td>                              
+                              <td>{{ c.descripcion}}</td>                      
+                              <td>{{ c.cantidad }}</td>
+                          </tr>
+                      {% endfor %}
+                          
+                          </tbody>
+                      </table>
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+      <footer class="main-footer">
+{% include "footer.html" %}    
+ {% endblock producto %}
+{% endblock content %}
+
+
+
+
+
+

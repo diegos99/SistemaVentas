@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat, CreateUserForm
+from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat, CreateUserForm, Formu
 from .models import tipocliente, cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, Factura, DetalleFactura, Orden, DetalleOrden
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
@@ -23,6 +23,7 @@ from datetime import datetime
 import decimal
 from django.utils import timezone
 import json
+import requests
 
 # INDEX Y LOGIN Y REGISTER
 @unauthenticated_user
@@ -680,3 +681,67 @@ def reporteordenes(request, pk):
 
     return render(request, 'orden/reporte_orden.html', locals())
 
+
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+
+# PEDIDOS
+@login_required(login_url='login')
+def listaCompra(request):
+    response = requests.get('http://localhost:8080/api/v1/pedido')
+    fabrica = response.json()
+    print(fabrica)
+    return render(request, 'compras/lista_compras.html', {
+        'fabrica': fabrica
+        #'data': fabrica[1],
+    })
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
+def compra(request):
+    if request.method == 'POST':
+        payload = {'id': '4', 'fechaEnvio': '20/04/2020', 'producto': 'prod1', 'descripcion': 'gfdgd', 'cantidad': '30'}
+        form = Formu(request.POST)
+        r = requests.post('http://localhost:8080/api/v1/pedido', json=request.POST)
+        pastebin_url = r.text
+        print(pastebin_url)
+        print(r.status_code)
+        print(request.POST)
+        print(form)
+    else:
+        form = Formu()
+
+    return render(request, 'compras/crear_compras.html', {'form': form})
+
+@login_required(login_url='login')
+def buzon(request):
+    return render(request, 'compras/reportecompras.html')
+
+""" def formularioAgregarSuscrip(request):
+    if request.method == "POST":
+        formulario = FormularioSuscrip(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+    else:
+        formulario = FormularioSuscrip()
+    return render(request, 'suscripciones/create_suscrip.html', {'formulario': formulario}) """
+
+#@login_required(login_url='login')
+#@allowed_users(allowed_roles=['admin', 'vendedor'])
+#def compra(request):
+#    payload = {'id': '3', 'fechaEnvio': '20/04/2020', 'producto': 'prod1', 'descripcion': 'gfdgd', 'cantidad': '30'}
+#    r = requests.post('http://localhost:8080/api/v1/pedido', json=payload)
+#    pastebin_url = r.text
+#    print(pastebin_url)
+#    print(r.text)
+#    print(r.status_code)
+#    return render(request, 'compras/crear_compras.html', {
+#        'r':r
+        #'fabrica': fabrica
+        #'data': fabrica[1],
+#    })
