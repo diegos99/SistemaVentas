@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat, CreateUserForm, Formu
-from .models import tipocliente, cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, Factura, DetalleFactura, Orden, DetalleOrden
+from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat, CreateUserForm, Formu, Formu2
+from .models import tipocliente, cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, Factura, DetalleFactura, Orden, DetalleOrden, PedidoRecibido
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -718,18 +718,27 @@ def compra(request):
 
     return render(request, 'compras/crear_compras.html', {'form': form})
 
-@login_required(login_url='login')
-def buzon(request):
-    return render(request, 'compras/reportecompras.html')
+#@login_required(login_url='login')
+#def buzon(request):
+#    if request.method == "POST":
+#        formulario = Formu2(request.POST)
+#        if formulario.is_valid():
+#            formulario.save()
+#    else:
+#        formulario = Formu2()
+#    return render(request, 'compras/reportecompras.html', {'formulario': formulario})
 
-""" def formularioAgregarSuscrip(request):
-    if request.method == "POST":
-        formulario = FormularioSuscrip(request.POST)
-        if formulario.is_valid():
-            formulario.save()
-    else:
-        formulario = FormularioSuscrip()
-    return render(request, 'suscripciones/create_suscrip.html', {'formulario': formulario}) """
+
+def lista_recibidos(request):
+    recibidos = PedidoRecibido.objects.all()
+    return render(request, 'compras/reportecompras.html', {'recibidos': recibidos})
+
+def listaRecibidos(request):
+    idRecibido = request.GET['id']
+    pedido = PedidoRecibido.objects.filter(id__contains=idRecibido)
+    data = serializers.serialize(
+        'json', pedido, fields=('id','producto', 'descripcion', 'cantidad'))
+    return HttpResponse(data, content_type='application/json')
 
 #@login_required(login_url='login')
 #@allowed_users(allowed_roles=['admin', 'vendedor'])

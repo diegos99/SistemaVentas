@@ -46,23 +46,15 @@
                     </thead>
                     <tbody>
                     
-                      {% for suscripcion in suscripciones %}       
+                      {% for suscripcion in recibidos %}       
 
                         <tr> 
-                          <td>{{ suscripcion.cliente.id }}</td>
-                          <td>{{ suscripcion.cliente.nombre }}</td>
-                          <td>{{ suscripcion.fecha_creacion }}</td>
-                          <td>{{ suscripcion.fecha_expiracion }}</td>
-                          <td>{{ suscripcion.estado }}</td>
-                          {% if suscripcion.estadosuscripcion > 30 %}
-                                  <td><b style="color:green;">{{suscripcion.estadosuscripcion}} - {{suscripcion.fecha_expiracion|date:'d/m/Y' }}</b></td>
-                              {% elif suscripcion.estadosuscripcion <= 30 and suscripcion.estadosuscripcion > 0 %}
-                                  <td><b style="color:rgb(243, 156, 18);">{{suscripcion.estadosuscripcion}} - {{suscripcion.fecha_expiracion|date:'d/m/Y' }}</b></td>
-                              {% else %}
-                              <td><b style="color:red;">{{suscripcion.estadosuscripcion}} - {{suscripcion.fecha_expiracion|date:'d/m/Y' }}</b></td>
-                              {% endif %} 
-                          
-                          
+						  <td>{{ suscripcion.id }}</td>
+						  <td>1</td>
+                          <td>{{ suscripcion.producto }}</td>
+                          <td>{{ suscripcion.descripcion }}</td>
+						  <td>{{ suscripcion.cantidad }}</td>
+						  <td>30/03/2020</td>
                           <td class="text-right">
                             <a href="/detalle_suscrip/{{ suscripcion.id }}" class="btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>
                             <a href="/editar_suscrip/{{ suscripcion.id }}" class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></a>                            

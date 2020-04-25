@@ -74,5 +74,6 @@ urlpatterns = [
     # PEDIDOS
     path('compras/crear_compras.html', views.compra, name='compra'),
     path('compras/lista_compras.html', views.listaCompra, name='listaompra'),
-    path('compras/reportecompras.html', views.buzon, name='buzon'),
+    path('compras/reportecompras.html', views.lista_recibidos, name='buzon'),
+    path('compras/lista_recibidos', views.listaRecibidos),
 ]

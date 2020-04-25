@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 #from django import forms
-from .models import tipocliente , cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad
+from .models import tipocliente , cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, PedidoRecibido
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
@@ -17,6 +17,12 @@ class Formu(forms.Form):
 	producto = forms.CharField(label='producto', max_length=100)
 	descripcion = forms.CharField(label='descripcion', max_length=100)
 	cantidad = forms.CharField(label='cantidad', max_length=100)
+
+# Form para recibir productos de fabrica
+class Formu2(ModelForm):
+	class Meta:
+		model = PedidoRecibido
+		fields = '__all__'
 
 class FormularioTipoCliente(ModelForm):
 	class Meta:

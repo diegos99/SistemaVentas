@@ -217,3 +217,9 @@ signals.post_save.connect(update_stock, sender=DetalleFactura, dispatch_uid="upd
 # -------------------------------------------------------------------------------------
 
 # PEDIDOS
+class PedidoRecibido(models.Model):
+	producto = models.CharField(max_length=40)
+	descripcion = models.CharField(max_length=40)
+	cantidad = models.CharField(max_length=40)
+	def __unicode__ (self):
+		return self.producto
