@@ -491,6 +491,14 @@ class ListaVentas(ListView):
         context['paginate_by']=context['events']
         return context
 
+# LISTADO DE VENTAS PARA API
+def buscarDetalleFacturas(request):
+    idFactura = request.GET['id']
+    facturas = DetalleFactura.objects.filter(id__contains=idFactura)
+    data = serializers.serialize(
+        'json', facturas, fields=('id', 'factura', 'detalleorden', 'producto', 'descripcion', 'fabrica', 'precio', 'cantidad', 'impuesto', 'subtotal'))
+    return HttpResponse(data, content_type='application/json')
+    
 # CORREO
 def send_email(mail, compra, repuesto, hora):
     template = get_template('factura/reporte_venta.html')

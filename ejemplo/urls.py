@@ -62,6 +62,8 @@ urlpatterns = [
     path('factura/crear_factura', views.facturaCrear),
     path('factura/lista_venta.html', ListaVentas.as_view(), name = 'ListaVentas'),
     path('reporte_venta/<int:pk>', views.reporteventas),
+    path('factura/buscar_facturas', views.buscarDetalleFacturas),
+
     # ORDENES
     path('orden/crear_factura.html', views.ordenCrear),
     path('orden/buscar_cliente', views.buscarClient),
