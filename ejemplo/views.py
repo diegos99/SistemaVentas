@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, redirect
 from .formularios import FormularioTipoCliente, FormularioCliente, FormularioSuscrip, FormularioRepuestos, FormularioFabricas, FormularioVehiculos, FormularioCompat, CreateUserForm, Formu, Formu2
 from .models import tipocliente, cliente, suscripcion, repuesto, fabrica, vehiculo, compatibilidad, Factura, DetalleFactura, Orden, DetalleOrden, PedidoRecibido
@@ -7,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.db import connection
 from django.db import transaction
 from django.core import serializers
+from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
@@ -242,14 +244,12 @@ def eliminarFabrica(request, fabrica_id):
     fabricas.delete()
     return render(request, 'fabricas/eliminar_fabricas.html')
 
-
-
 #REPUESTOS
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def formularioAgregarRepuesto(request):
     if request.method == "POST":
-        formulario = FormularioRepuestos(request.POST)
+        formulario = FormularioRepuestos(request.POST, request.FILES or None)
         if formulario.is_valid():
             formulario.save()
     else:
@@ -490,6 +490,22 @@ class ListaVentas(ListView):
         context['compras'] = context['events']
         context['paginate_by']=context['events']
         return context
+
+# CORREO
+def send_email(mail, compra, repuesto, hora):
+    template = get_template('factura/reporte_venta.html')
+    content = template.render({'compra': compra, 'repuesto': repuesto, 'hora': hora})
+
+    email = EmailMultiAlternatives(
+        'Recordatorio de pago',
+        ' ',
+        settings.EMAIL_HOST_USER,
+        [mail]
+    )
+
+    email.attach_alternative(content, 'text/html')
+    email.send()
+
 # Detalle de la factura o de la venta
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin', 'vendedor'])
@@ -497,6 +513,9 @@ def reporteventas(request, pk):
     compra = Factura.objects.get(pk=pk)
     repuesto = compra.factura.all()
     hora = datetime.today()
+    if request.method == 'POST':
+        mail = request.POST.get('mail')
+        send_email(mail, compra, repuesto, hora)
 
     return render(request, 'factura/reporte_venta.html', locals())
 
@@ -657,7 +676,7 @@ def buscarProduct(request):
     idProducto = request.GET['id']
     producto = repuesto.objects.filter(id__contains=idProducto)
     data = serializers.serialize(
-        'json', producto, fields=('id','nombre', 'descripcion', 'fabrica', 'precio_venta', 'stock', 'igv'))
+        'json', producto, fields=('id','nombre', 'descripcion', 'fabrica', 'precio_venta', 'stock', 'igv', 'imagen', 'imagen2'))
     return HttpResponse(data, content_type='application/json')
 
 # Lista de Ordenes

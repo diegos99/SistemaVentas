@@ -138,6 +138,8 @@
                                 html += 'Precio Venta: ' + data[i].fields.precio_venta + '<br>';
                                 html += 'stock: ' + data[i].fields.stock + '<br>';
                                 html += 'Fabrica: ' + data[i].fields.fabrica + '<br>';
+                                html += 'Imagen 1: <img src="http://127.0.0.1:8000/media/' + data[i].fields.imagen + '" style="width: 70px;"><br>';
+                                html += 'Imagen 2: <img src="' + data[i].fields.imagen2 + '" style="width: 70px;"><br>';
                                 html += '<input name="p-cantidad" id="p-cantidad" placeholder="Cantidad" type="text">';
 
                                 var fila = new Object();

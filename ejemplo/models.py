@@ -79,6 +79,8 @@ class repuesto(models.Model):
 	precio_fabricante = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
 	precio_venta = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
 	igv = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
+	imagen = models.ImageField(blank=True, null=True)
+	imagen2 = models.CharField(max_length=400, null=True)
 	def __str__ (self):
 		return U" %s- %s" % (self.nombre, self.descripcion)
 	""" def __unicode__ (self):

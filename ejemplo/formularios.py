@@ -12,7 +12,7 @@ class CreateUserForm(UserCreationForm):
 
 # Form para hacer pedido
 class Formu(forms.Form):
-	id = forms.CharField(label='id', max_length=100)
+	
 	fechaEnvio = forms.CharField(label='fechaEnvio', max_length=100)
 	producto = forms.CharField(label='producto', max_length=100)
 	descripcion = forms.CharField(label='descripcion', max_length=100)

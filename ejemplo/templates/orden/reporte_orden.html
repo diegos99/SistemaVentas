@@ -15,10 +15,10 @@
 			<div class="cnt-inputs">
 				<ul>
 					<li>
-						<h3>No. Factura: {{compra.id}}</h3>
+						<h3>No. Orden: {{compra.id}}</h3>
 						<h3>Cliente: {{compra.cliente}} </h3>						
 						<h3>Fecha: {{compra.fecha}}</h3>
-						<h3>Trabajador: {{compra.vendedor}}</h3>
+						<h3>Trabajador: {{ user.username|capfirst }}</h3>
 					</li>	
 				</ul>
 			</div>
@@ -67,7 +67,7 @@
 				<ul>
 					<li>
 						<h3>Impreso a las: {{ hora|date:"P"}}</h3>						
-						<h3>Trabajador: {{compra.vendedor}}</h3>
+						<h3>Trabajador: {{ user.username|capfirst }}</h3>
 						<h3>Dirección: Avenida Santa Cecilia Z.8 - Guatemala</h3>
 						<h3>Teléfono: +502 5248-7596</h3>
 						

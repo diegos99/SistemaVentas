@@ -129,3 +129,10 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
+
+# Configuracion de envio de emails
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'vega171166@unis.edu.gt'
+EMAIL_HOST_PASSWORD = 'Checolote99'
+EMAIL_USE_TLS = True
