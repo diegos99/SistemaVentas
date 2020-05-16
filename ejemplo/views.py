@@ -745,6 +745,22 @@ def compra(request):
 
     return render(request, 'compras/crear_compras.html', {'form': form})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin', 'vendedor'])
+def compra2(request):
+    if request.method == 'POST':
+        payload = {'id': '4', 'fechaEnvio': '20/04/2020', 'producto': 'prod1', 'descripcion': 'gfdgd', 'cantidad': '30'}
+        form2 = Formu2(request.POST)
+        r = requests.post('http://localhost:8090/api/v1/pedido', json=request.POST)
+        pastebin_url = r.text
+        print(pastebin_url)
+        print(r.status_code)
+        print(request.POST)
+        print(form)
+    else:
+        form = Formu2()
+
+    return render(request, 'compras/crear_compras.html', {'form2': form2})
 #@login_required(login_url='login')
 #def buzon(request):
 #    if request.method == "POST":

@@ -18,6 +18,12 @@ class Formu(forms.Form):
 	descripcion = forms.CharField(label='descripcion', max_length=100)
 	cantidad = forms.CharField(label='cantidad', max_length=100)
 
+class Formu2(forms.Form):
+	
+	fechaEnvio = forms.CharField(label='fechaEnvio', max_length=100)
+	producto = forms.CharField(label='producto', max_length=100)
+	descripcion = forms.CharField(label='descripcion', max_length=100)
+	cantidad = forms.CharField(label='cantidad', max_length=100)
 # Form para recibir productos de fabrica
 class Formu2(ModelForm):
 	class Meta:
